@@ -16,60 +16,71 @@ const {
   query,
   orderByKey,
 } = require("firebase/database");
-const date = new Date();
 
 var username = null;
+var receiver = null;
 
-var temp = 0;
 
 app.use(express.static("public"));
 
-var newmessage = false;
 
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public/index.html");
 });
 
-const latest_time_ref = ref(config.db, "latest_msg/time");
-const latest_msg_ref = ref(config.db, "latest_msg");
+
 
 io.on("connect", (socket) => {
   socket.on("user_added", (uname) => {
     username = uname;
     console.log("a user connected");
-    // get(ref(config.db, "users/").orderByChild()).then((snapshot) => {
-    //   console.log(snapshot.val());
-    // });
-    // get(query(ref(config.db, "users/"), orderByKey())).then((snapshot) => {
-    //   var a = snapshot.val();
-    //   // console.log(typeof a);
-    //   for (let b in a) {
-    //     console.log(b);
-    //   }
-    // });
     get(ref(config.db, "users/" + username)).then((snapshot) => {
       if (snapshot.val() != null) {
-        socket.emit("initial",snapshot.val())
+        socket.emit("initial", snapshot.val());
       }
     });
   });
+  socket.on("receiver", (receiver_) => {
+    receiver = receiver_;
+    sessionname =
+      [receiver, username].sort()[0] + [receiver, username].sort()[1];
+    get(ref(config.db, "users/" + receiver)).then((snapshot) => {
+      if (snapshot.val() == null) {
+        socket.emit("not_available");
+      }
+      set(ref(config.db, "sessions/" + sessionname), {
+        msg: "test",
+        uname: "test",
+        time: { time: 0 },
+      });
+    });
+  });
 
-  socket.on("msg_sent", (uname, msg, time) => {
-    set(ref(config.db, "users/" + username + "/messages/" + time), {
+  socket.on("msg_sent", (uname, receiver, msg, time) => {
+    set(ref(config.db, "users/" + uname + "/" + receiver + "/" + time), {
       message: msg,
     });
-    set(latest_msg_ref, { message: msg, uname: uname, time: { time: time } });
-  });
-  onChildChanged(latest_time_ref, () => {
-    get(latest_msg_ref).then((snapshot) => {
-      socket.emit(
-        "ting",
-        snapshot.val().message,
-        snapshot.val().uname,
-        snapshot.val().time.time
-      );
+    sessionname = [receiver, uname].sort()[0] + [receiver, uname].sort()[1];
+    set(ref(config.db, "sessions/" + sessionname), {
+      message: msg,
+      uname: uname,
+      time: { time: time },
     });
   });
+  socket.on("ready", () => {
+    onChildChanged(ref(config.db, "sessions/" + sessionname + "/time"), () => {
+      get(ref(config.db, "sessions/" + sessionname)).then((snapshot) => {
+        // console.log(snapshot.val());
+        socket.emit(
+          "ting",
+          snapshot.val().message,
+          snapshot.val().uname,
+          snapshot.val().time.time
+        );
+      });
+    });
+  });
+
 });
 
 server.listen(3000, console.log("server listning on port 3000"));
