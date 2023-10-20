@@ -11,7 +11,7 @@ socket.on("not_available", () => {
   body = document.getElementById("body");
   body.innerHTML = "<h1>this human is not human search another human</h1>";
 });
-socket.emit("ready")
+socket.emit("ready");
 function num_to_day(num) {
   switch (num) {
     case 0:
@@ -68,17 +68,23 @@ var form = document.getElementById("form");
 var msg_cont = document.getElementById("message-input");
 
 socket.on("initial", (value) => {
-  let messages = value["messages"];
-
-  for (each in messages) {
+  // let messages = value["messages"];
+  // console.log(value)
+  for (each in value) {
     let timestamp = each;
-    let message = messages[each]["message"];
-    add_messages(message, uname, parseInt(timestamp), "sending");
+    let message = value[each]["message"];
+    console.log(message);
+    if (value[each]["sender"] == uname) {
+      add_messages(message, uname, parseInt(timestamp), "sending");
+    } else {
+      add_messages(message, receiver, parseInt(timestamp), "receiving");
+    }
+    // add_messages(message, uname, parseInt(timestamp), "sending");
   }
 });
 
 socket.on("ting", (msg, username, time) => {
-  console.log("meowoew")
+  console.log("meowoew");
   if (username == uname) {
     add_messages(msg, username, time, "sending");
   } else {
@@ -91,7 +97,7 @@ form.addEventListener("submit", (event) => {
   if (msg_cont.value) {
     let time = new Date().getTime();
     // add_messages(msg_cont.value, uname, time, "sending");
-    socket.emit("msg_sent", uname,receiver, msg_cont.value, time);
+    socket.emit("msg_sent", uname, receiver, msg_cont.value, time);
     msg_cont.value = "";
   }
 });
