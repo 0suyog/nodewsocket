@@ -24,31 +24,62 @@ var initial_messages = [];
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/public/index.html");
+  res.sendFile(__dirname + "/public/login.html");
 });
 
 io.on("connect", (socket) => {
-  socket.on("user_added", (uname) => {
-    username = uname;
-    console.log("a user connected");
+  // socket.on("user_added", (uname) => {
+  //   username = uname;
+  //   console.log("a user connected");
+  // });
+  socket.on("register", (username_, password_) => {
+    get(ref(config.db, "users/" + username_ + "/password")).then((snapshot) => {
+      if (snapshot.val() != null) {
+        socket.emit("already_exist");
+      } else {
+        set(ref(config.db, "users/" + username_ + "/password"), {
+          password: password_,
+        });
+        socket.emit("created");
+      }
+    });
+    // console.log("a new user has been created");
+  });
+  socket.on("credentials", (username_, password_) => {
+    username = username_;
+    var password = password_;
+    get(ref(config.db, "users/" + username + "/password")).then((snapshot) => {
+      if (snapshot.val() != null) {
+        if (snapshot.val().password == password) {
+          socket.emit("received_credentials");
+          console.log("a user connected");
+        } else {
+          socket.emit("wrong_credentials");
+        }
+      } else {
+        socket.emit("wrong_credentials");
+      }
+    });
+    // console.log("a user connected")
+    // socket.emit("received_credentials",socket.id)
   });
   socket.on("receiver", (receiver_) => {
     receiver = receiver_;
     sessionname =
       [receiver, username].sort()[0] + [receiver, username].sort()[1];
-    get(ref(config.db, "users/" + receiver)).then((snapshot) => {
+    get(ref(config.db, "users/" + receiver + "/password")).then((snapshot) => {
       if (snapshot.val() == null) {
         socket.emit("not_available");
       } else {
-        set(ref(config.db, "sessions/" + sessionname), {
-          msg: "test",
-          uname: "test",
-          time: { time: 0 },
-        });
+        socket.emit("available");
+        // set(ref(config.db, "sessions/" + sessionname), {
+        //   msg: "test",
+        //   uname: "test",
+        //   time: { time: 0 },
+        // });
         get(ref(config.db, "users/" + username + "/" + receiver)).then(
           (snapshot) => {
             if (snapshot.val() != null) {
-              
               let value = snapshot.val();
               initial_messages.push(value);
               // for (data in value) {
@@ -74,10 +105,10 @@ io.on("connect", (socket) => {
               .forEach((data) => {
                 initial_messages[data] = temp[data];
               });
-              socket.emit("initial", initial_messages);
+            socket.emit("initial", initial_messages);
             // console.log(initial_messages);
 
-            initial_messages=[]
+            initial_messages = [];
           }
         );
       }
