@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <link rel="stylesheet" href="register.css"> -->
+    <title>Sign Up</title>
+  </head>
+  <body id="body">
+    <div id="login_interface" class="login_container">
+      <div class="flex-container">
+        <div class="content-container">
+          <div class="form-container">
+            <form id="login-form" action="">
+              <h1>Login</h1>
+              <br />
+              <span class="subtitle">USERNAME:</span>
+              <br />
+              <input
+                type="text"
+                name="username"
+                value=""
+                id="username"
+                required
+              />
+              <br />
+              <span class="subtitle">PASSWORD:</span>
+              <br />
+              <input
+                type="password"
+                name="password"
+                value=""
+                id="password"
+                required
+              />
+              <br /><br />
+              <input type="submit" value="Login" class="submit-btn" />
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="register_interface" class="register_container">
+      <div class="flex-container">
+        <div class="content-container">
+          <div class="form-container">
+            <form id="register_form" action="">
+              <h1>Sign Up</h1>
+              <br />
+              <span class="subtitle">USERNAME:</span>
+              <br />
+              <input
+                type="text"
+                name="username"
+                value=""
+                id="new_username"
+                required
+              />
+              <br />
+              <span class="subtitle">PASSWORD:</span>
+              <br />
+              <input
+                type="password"
+                name="password"
+                value=""
+                id="new_password"
+                required
+              />
+              <br /><br />
+              <input type="submit" value="SIGN UP" class="submit-btn" />
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="messaging_interface" class="messaging_container">
+      <div id="container" class="container">
+        <div class="receiving message_container">
+          <div class="username"><b>name</b></div>
+          <div class="colored_portion">
+            <div class="message">hello brother me is not fine</div>
+            <div class="time">12:30 PM</div>
+          </div>
+        </div>
+        <div class="sending message_container">
+          <div class="username"><b>name</b></div>
+          <div class="colored_portion">
+            <div class="message">hello brother me is not fine</div>
+            <div class="time">12:30 PM</div>
+          </div>
+        </div>
+      </div>
+
+      <form action="" id="message-form">
+        <input
+          type="text"
+          id="message-input"
+          name="message"
+          placeholder="Type your message"
+          required
+        />
+        <button type="submit" id="send-button">
+          Send <i class="fa fa-send-o"></i>
+        </button>
+      </form>
+    </div>
+    <div id="wrong" class="wrong">
+      <h1>Wrong username/password.Click that button to register</h1>
+      <button id="register">register</button>
+    </div>
+    <div id="already_exist" class="already_exist">
+      <h1>User Already exist.Click that button to register</h1>
+      <button id="signin">sign in</button>
+    </div>
+    <style id="style">
+      .messaging_container {
+        display: none;
+      }
+      .wrong {
+        display: none;
+      }
+      .register_container {
+        display: none;
+      }
+      .already_exist{
+        display: none;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        background: #121212; /* fallback for old browsers */
+        overflow-x: hidden;
+
+        height: 100%;
+
+        /* code to make all text unselectable */
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -o-user-select: none;
+        user-select: none;
+      }
+
+      /* Disables selector ring */
+      body:not(.user-is-tabbing) button:focus,
+      body:not(.user-is-tabbing) input:focus,
+      body:not(.user-is-tabbing) select:focus,
+      body:not(.user-is-tabbing) textarea:focus {
+        outline: none;
+      }
+
+      /* ########################################################## */
+
+      h1 {
+        color: white;
+
+        font-size: 35px;
+        font-weight: 800;
+      }
+
+      .flex-container {
+        width: 100vw;
+
+        margin-top: 60px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .content-container {
+        width: 500px;
+        height: 350px;
+      }
+
+      .form-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        width: 500px;
+        height: 350px;
+
+        margin-top: 5px;
+        padding-top: 20px;
+
+        border-radius: 12px;
+
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+
+        background: #1f1f1f;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.199);
+      }
+
+      .subtitle {
+        font-size: 11px;
+
+        color: rgba(177, 177, 177, 0.3);
+      }
+      .login_container {
+        display: block;
+      }
+
+      input {
+        border: none;
+        border-bottom: solid rgb(143, 143, 143) 1px;
+
+        margin-bottom: 30px;
+
+        background: none;
+        color: rgba(255, 255, 255, 0.555);
+
+        height: 35px;
+        width: 300px;
+      }
+
+      .submit-btn {
+        cursor: pointer;
+
+        border: none;
+        border-radius: 8px;
+
+        box-shadow: 2px 2px 7px #38d39f70;
+
+        background: #38d39f;
+        color: rgba(255, 255, 255, 0.8);
+
+        width: 80px;
+
+        transition: all 1s;
+      }
+
+      .submit-btn:hover {
+        color: rgb(255, 255, 255);
+
+        box-shadow: none;
+      }
+    </style>
+  </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="login_script.js"></script>
+</html>
