@@ -23,9 +23,16 @@ var initial_messages = [];
 
 app.use(express.static("public"));
 
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/public/login.html");
+app.get("/login", (req, res) => {
+  res.sendFile(__dirname + "/public/login1.html");
 });
+app.get("/register", (req, res) => {
+  res.sendFile(__dirname + "/public/register.html");
+})
+app.get("/messaging", (req, res) => {
+  res.sendFile(__dirname+"/public/messaging_ui.html")
+})
+
 
 io.on("connect", (socket) => {
   // socket.on("user_added", (uname) => {
@@ -51,7 +58,7 @@ io.on("connect", (socket) => {
     get(ref(config.db, "users/" + username + "/password")).then((snapshot) => {
       if (snapshot.val() != null) {
         if (snapshot.val().password == password) {
-          socket.emit("received_credentials");
+          socket.emit("received_credentials",username);
           console.log("a user connected");
         } else {
           socket.emit("wrong_credentials");
