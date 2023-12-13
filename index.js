@@ -24,15 +24,14 @@ var initial_messages = [];
 app.use(express.static("public"));
 
 app.get("/login", (req, res) => {
-  res.sendFile(__dirname + "/public/login1.html");
+  res.sendFile(__dirname + "/public/login.html");
 });
 app.get("/register", (req, res) => {
   res.sendFile(__dirname + "/public/register.html");
-})
+});
 app.get("/messaging", (req, res) => {
-  res.sendFile(__dirname+"/public/messaging_ui.html")
-})
-
+  res.sendFile(__dirname + "/public/messaging_ui.html");
+});
 
 io.on("connect", (socket) => {
   // socket.on("user_added", (uname) => {
@@ -58,7 +57,7 @@ io.on("connect", (socket) => {
     get(ref(config.db, "users/" + username + "/password")).then((snapshot) => {
       if (snapshot.val() != null) {
         if (snapshot.val().password == password) {
-          socket.emit("received_credentials",username);
+          socket.emit("received_credentials", username);
           console.log("a user connected");
         } else {
           socket.emit("wrong_credentials");
@@ -70,57 +69,136 @@ io.on("connect", (socket) => {
     // console.log("a user connected")
     // socket.emit("received_credentials",socket.id)
   });
+
+  // this right here checks if username searched is friend or not and if not then it adds them as friend
+
   socket.on("receiver", (receiver_) => {
-    receiver = receiver_;
-    sessionname =
-      [receiver, username].sort()[0] + [receiver, username].sort()[1];
-    get(ref(config.db, "users/" + receiver + "/password")).then((snapshot) => {
+    get(ref(config.db, "users/" + receiver_ + "/password")).then((snapshot) => {
       if (snapshot.val() == null) {
         socket.emit("not_available");
       } else {
-        socket.emit("available");
-        // set(ref(config.db, "sessions/" + sessionname), {
-        //   msg: "test",
-        //   uname: "test",
-        //   time: { time: 0 },
-        // });
-        get(ref(config.db, "users/" + username + "/" + receiver)).then(
+        // receiver = reciever_;
+        get(ref(config.db, "users/" + username + "/friends/" + receiver_)).then(
           (snapshot) => {
-            if (snapshot.val() != null) {
-              let value = snapshot.val();
-              initial_messages.push(value);
-              // for (data in value) {
-              //   initial_messages.push({ data: value[data] });
-              // }
-            }
-          }
-        );
-        get(ref(config.db, "users/" + receiver + "/" + username)).then(
-          (snapshot) => {
-            let value = snapshot.val();
-            initial_messages.push(value);
-            initial_messages = {
-              ...initial_messages[0],
-              ...initial_messages[1],
-            };
-            let temp = initial_messages;
-            initial_messages = {};
-            Object.keys(temp)
-              .sort((a, b) => {
-                return a - b;
-              })
-              .forEach((data) => {
-                initial_messages[data] = temp[data];
+            if (snapshot.val() == null) {
+              set(ref(config.db, "users/" + username + "/friends"), {
+                [receiver_]: 1,
               });
-            socket.emit("initial", initial_messages);
-            // console.log(initial_messages);
-
-            initial_messages = [];
+              socket.emit("available", receiver_);
+            }
           }
         );
       }
     });
   });
+
+  // this is for handling the user selected by clicking in the side bar
+
+  socket.on("talker", (receiver_) => {
+    receiver = receiver_;
+    sessionname =
+      [receiver, username].sort()[0] + [receiver, username].sort()[1];
+
+    get(ref(config.db, "users/" + username + "/" + receiver)).then(
+      (snapshot) => {
+        if (snapshot.val() != null) {
+          let value = snapshot.val();
+          initial_messages.push(value);
+          // for (data in value) {
+          //   initial_messages.push({ data: value[data] });
+          // }
+        }
+      }
+    );
+    get(ref(config.db, "users/" + receiver + "/" + username)).then(
+      (snapshot) => {
+        let value = snapshot.val();
+        initial_messages.push(value);
+        initial_messages = {
+          ...initial_messages[0],
+          ...initial_messages[1],
+        };
+        let temp = initial_messages;
+        initial_messages = {};
+
+        //! this following shitty lines of code sort messages dont think abt it for 1/2 hr like you did just now
+
+        Object.keys(temp)
+          .sort((a, b) => {
+            return a - b;
+          })
+          .forEach((data) => {
+            initial_messages[data] = temp[data];
+          });
+
+        //! sitty code finished
+
+        socket.emit("initial", initial_messages);
+        // console.log(initial_messages);
+
+        initial_messages = [];
+      }
+    );
+  });
+  // socket.on("receiver", (receiver_) => {
+  //   receiver = receiver_;
+  //   sessionname =
+  //     [receiver, username].sort()[0] + [receiver, username].sort()[1];
+
+  //   // TODO add some kind of id so i dont have to use password to see if it exists or not
+
+  //   get(ref(config.db, "users/" + receiver + "/password")).then((snapshot) => {
+  //     if (snapshot.val() == null) {
+  //       socket.emit("not_available");
+  //     } else {
+  //       socket.emit("available");
+  //       console.log("well its getting to here at least");
+  //       set(ref(config.db, "users/" + username + "/freinds"), {
+  //         "uname":receiver   //TODO soon to be replaced by the id someday surely
+  //       });
+  //       get(ref(config.db, "users/" + username + "/" + receiver)).then(
+  //         (snapshot) => {
+  //           if (snapshot.val() != null) {
+  //             let value = snapshot.val();
+  //             initial_messages.push(value);
+  //             // for (data in value) {
+  //             //   initial_messages.push({ data: value[data] });
+  //             // }
+  //           }
+  //         }
+  //       );
+  //       get(ref(config.db, "users/" + receiver + "/" + username)).then(
+  //         (snapshot) => {
+  //           let value = snapshot.val();
+  //           initial_messages.push(value);
+  //           initial_messages = {
+  //             ...initial_messages[0],
+  //             ...initial_messages[1],
+  //           };
+  //           let temp = initial_messages;
+  //           initial_messages = {};
+
+  //           //! this following shitty lines of code sort messages dont think abt it for 1/2 hr like you did just now
+
+  //           Object.keys(temp)
+  //             .sort((a, b) => {
+  //               return a - b;
+  //             })
+  //             .forEach((data) => {
+  //               initial_messages[data] = temp[data];
+  //             });
+
+  //           //! sitty code finished
+
+  //           socket.emit("initial", initial_messages);
+  //           // console.log(initial_messages);
+
+  //           initial_messages = [];
+  //         }
+  //       );
+  //     }
+  //   });
+  // });
 
   socket.on("msg_sent", (uname, receiver, msg, time) => {
     set(ref(config.db, "users/" + uname + "/" + receiver + "/" + time), {
@@ -134,7 +212,8 @@ io.on("connect", (socket) => {
       time: { time: time },
     });
   });
-  socket.on("ready", () => {
+  socket.on("ready", (uname, receiver) => {
+    sessionname = [receiver, uname].sort()[0] + [receiver, uname].sort()[1];
     onChildChanged(ref(config.db, "sessions/" + sessionname + "/time"), () => {
       get(ref(config.db, "sessions/" + sessionname)).then((snapshot) => {
         // console.log(snapshot.val());
