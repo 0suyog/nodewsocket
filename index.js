@@ -1,5 +1,6 @@
 const express = require("express");
 const http = require("http");
+const url = require("url");
 const app = express();
 const server = http.createServer(app);
 const { Server } = require("socket.io");
@@ -16,12 +17,20 @@ const {
   query,
   orderByKey,
 } = require("firebase/database");
+const { type } = require("os");
 
 var username = null;
 var receiver = null;
 var initial_messages = [];
 
+// dont understand this? whatever this is search regex in js or go to regexr.com
+let re = /[\[\]`~!@#$%^&*( )_\-+={}\|\\:;"'<,>.?/]/;
+
 app.use(express.static("public"));
+
+app.get("/", (req, res) => {
+  res.redirect("/login");
+});
 
 app.get("/login", (req, res) => {
   res.sendFile(__dirname + "/public/login.html");
@@ -33,6 +42,10 @@ app.get("/messaging", (req, res) => {
   res.sendFile(__dirname + "/public/messaging_ui.html");
 });
 
+app.get("*", (req, res) => {
+  res.send("404 NOT FOUND!!!");
+});
+
 io.on("connect", (socket) => {
   // socket.on("user_added", (uname) => {
   //   username = uname;
@@ -40,34 +53,51 @@ io.on("connect", (socket) => {
   // });
   socket.on("register", (username_, password_) => {
     get(ref(config.db, "users/" + username_ + "/password")).then((snapshot) => {
-      if (snapshot.val() != null) {
-        socket.emit("already_exist");
+      if (!re.test(username_)) {
+        if (snapshot.val() != null) {
+          socket.emit("already_exist");
+        } else {
+          set(ref(config.db, "users/" + username_ + "/password"), {
+            password: password_,
+          });
+          socket.emit("created");
+        }
       } else {
-        set(ref(config.db, "users/" + username_ + "/password"), {
-          password: password_,
-        });
-        socket.emit("created");
+        socket.emit("special_char");
       }
     });
     // console.log("a new user has been created");
   });
   socket.on("credentials", (username_, password_) => {
-    username = username_;
-    var password = password_;
-    get(ref(config.db, "users/" + username + "/password")).then((snapshot) => {
-      if (snapshot.val() != null) {
-        if (snapshot.val().password == password) {
-          socket.emit("received_credentials", username);
-          console.log("a user connected");
-        } else {
-          socket.emit("wrong_credentials");
+    if (!re.test(username_)) {
+      username = username_;
+      var password = password_;
+      get(ref(config.db, "users/" + username + "/password")).then(
+        (snapshot) => {
+          if (snapshot.val() != null) {
+            if (snapshot.val().password == password) {
+              socket.emit("received_credentials", username);
+              console.log("a user connected");
+            } else {
+              socket.emit("wrong_credentials");
+            }
+          } else {
+            socket.emit("wrong_credentials");
+          }
         }
-      } else {
-        socket.emit("wrong_credentials");
-      }
-    });
+      );
+    } else {
+      socket.emit("special_char");
+    }
     // console.log("a user connected")
     // socket.emit("received_credentials",socket.id)
+  });
+
+  // this signal is for knowing that the messaging page has been reached and sends friends list to load for first time
+  socket.on("messaging_place", () => {
+    get(ref(config.db, "users/" + username + "/friends")).then((snapshot) => {
+      socket.emit("initial_friends", Object.keys(snapshot.val()));
+    });
   });
 
   // this right here checks if username searched is friend or not and if not then it adds them as friend

@@ -1,4 +1,5 @@
 var socket = io();
+socket.emit("messaging_place")
 search_field = document.getElementById("uname_search");
 var uname = localStorage.getItem("token");
 var receiver = null;
@@ -11,6 +12,34 @@ search_field.addEventListener("keydown", (event) => {
 socket.on("not_available", () => {
   alert("the user doesnt exist");
 });
+
+function add_friends_in_sidebar(friend) {
+  chat_head = document.createElement("div");
+  chat_head.classList.add("chat-heads");
+  // chat_head.setAttribute("name", receiver);
+  chat_head.name = friend;
+  chat_head.innerHTML = `
+    <div class="avatar">${friend[0]}</div>
+    <div class="text-container">   
+        <div class="text"><b>${friend}</b><span><i class="fa fa-check" ></i>12:03 AM</span></div>
+        <div class="text"><b>this is supposed to be  recent message</b></div>
+    </div>
+    `;
+  friends_sidebar.appendChild(chat_head);
+  // !potention error incoming
+  chat_head.onclick = () => {
+    receiver = friend;
+    socket.emit("talker", friend);
+  };
+}
+
+socket.on("initial_friends", (list) => {
+  console.log("am i getting here?");
+  list.forEach((friend) => {
+    add_friends_in_sidebar(friend);
+  });
+});
+
 // sample
 /*
 <div class="chat-heads" id="clickable">
@@ -23,23 +52,7 @@ socket.on("not_available", () => {
 friends_sidebar = document.getElementById("friends");
 users_name_container = document.getElementById("users_name");
 socket.on("available", (rec) => {
-  chat_head = document.createElement("div");
-  chat_head.classList.add("chat-heads");
-  // chat_head.setAttribute("name", receiver);
-  chat_head.name = rec;
-  chat_head.innerHTML = `
-    <div class="avatar">${rec[0]}</div>
-    <div class="text-container">   
-        <div class="text"><b>${rec}</b><span><i class="fa fa-check" ></i>12:03 AM</span></div>
-        <div class="text"><b>this is supposed to be  recent message</b></div>
-    </div>
-    `;
-  friends_sidebar.appendChild(chat_head);
-  // !potention error incoming
-  chat_head.onclick = () => {
-    receiver = rec;
-    socket.emit("talker", rec);
-  };
+  add_friends_in_sidebar(rec);
 });
 
 function num_to_day(num) {

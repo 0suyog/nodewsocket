@@ -25,6 +25,9 @@
               autofocus
             />
             <br />
+            <p id="special_char" class="special_char">
+              username cant contain special characters
+            </p>
             <span class="subtitle">PASSWORD:</span>
             <br />
             <input type="password" name="password" value="" id="password" />
@@ -50,6 +53,9 @@
         scroll-behavior: smooth;
       }
       .worng_creds {
+        display: none;
+      }
+      .special_char {
         display: none;
       }
       * {
