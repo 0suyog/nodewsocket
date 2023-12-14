@@ -8,7 +8,6 @@ var special_char = document.getElementById("special_char");
 register_form.addEventListener("submit", (event) => {
   event.preventDefault();
   socket.emit("register", new_username.value, new_password.value);
-//   console.log(new_password.value);
 });
 
 socket.on("created", () => {

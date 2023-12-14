@@ -47,10 +47,6 @@ app.get("*", (req, res) => {
 });
 
 io.on("connect", (socket) => {
-  // socket.on("user_added", (uname) => {
-  //   username = uname;
-  //   console.log("a user connected");
-  // });
   socket.on("register", (username_, password_) => {
     get(ref(config.db, "users/" + username_ + "/password")).then((snapshot) => {
       if (!re.test(username_)) {
@@ -89,8 +85,6 @@ io.on("connect", (socket) => {
     } else {
       socket.emit("special_char");
     }
-    // console.log("a user connected")
-    // socket.emit("received_credentials",socket.id)
   });
 
   // this signal is for knowing that the messaging page has been reached and sends friends list to load for first time
@@ -151,7 +145,7 @@ io.on("connect", (socket) => {
         let temp = initial_messages;
         initial_messages = {};
 
-        //! this following shitty lines of code sort messages dont think abt it for 1/2 hr like you did just now
+        // this following shitty lines of code sort messages dont think abt it for 1/2 hr like you did just now
 
         Object.keys(temp)
           .sort((a, b) => {
@@ -161,7 +155,7 @@ io.on("connect", (socket) => {
             initial_messages[data] = temp[data];
           });
 
-        //! sitty code finished
+        // sitty code finished
 
         socket.emit("initial", initial_messages);
         // console.log(initial_messages);
@@ -170,65 +164,6 @@ io.on("connect", (socket) => {
       }
     );
   });
-  // socket.on("receiver", (receiver_) => {
-  //   receiver = receiver_;
-  //   sessionname =
-  //     [receiver, username].sort()[0] + [receiver, username].sort()[1];
-
-  //   // TODO add some kind of id so i dont have to use password to see if it exists or not
-
-  //   get(ref(config.db, "users/" + receiver + "/password")).then((snapshot) => {
-  //     if (snapshot.val() == null) {
-  //       socket.emit("not_available");
-  //     } else {
-  //       socket.emit("available");
-  //       console.log("well its getting to here at least");
-  //       set(ref(config.db, "users/" + username + "/freinds"), {
-  //         "uname":receiver   //TODO soon to be replaced by the id someday surely
-  //       });
-  //       get(ref(config.db, "users/" + username + "/" + receiver)).then(
-  //         (snapshot) => {
-  //           if (snapshot.val() != null) {
-  //             let value = snapshot.val();
-  //             initial_messages.push(value);
-  //             // for (data in value) {
-  //             //   initial_messages.push({ data: value[data] });
-  //             // }
-  //           }
-  //         }
-  //       );
-  //       get(ref(config.db, "users/" + receiver + "/" + username)).then(
-  //         (snapshot) => {
-  //           let value = snapshot.val();
-  //           initial_messages.push(value);
-  //           initial_messages = {
-  //             ...initial_messages[0],
-  //             ...initial_messages[1],
-  //           };
-  //           let temp = initial_messages;
-  //           initial_messages = {};
-
-  //           //! this following shitty lines of code sort messages dont think abt it for 1/2 hr like you did just now
-
-  //           Object.keys(temp)
-  //             .sort((a, b) => {
-  //               return a - b;
-  //             })
-  //             .forEach((data) => {
-  //               initial_messages[data] = temp[data];
-  //             });
-
-  //           //! sitty code finished
-
-  //           socket.emit("initial", initial_messages);
-  //           // console.log(initial_messages);
-
-  //           initial_messages = [];
-  //         }
-  //       );
-  //     }
-  //   });
-  // });
 
   socket.on("msg_sent", (uname, receiver, msg, time) => {
     set(ref(config.db, "users/" + uname + "/" + receiver + "/" + time), {
@@ -246,7 +181,6 @@ io.on("connect", (socket) => {
     sessionname = [receiver, uname].sort()[0] + [receiver, uname].sort()[1];
     onChildChanged(ref(config.db, "sessions/" + sessionname + "/time"), () => {
       get(ref(config.db, "sessions/" + sessionname)).then((snapshot) => {
-        // console.log(snapshot.val());
         socket.emit(
           "ting",
           snapshot.val().message,

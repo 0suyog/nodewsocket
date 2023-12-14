@@ -120,7 +120,6 @@ socket.on("initial", (value) => {
     } else {
       add_messages(message, receiver, parseInt(timestamp), "receiving");
     }
-    // add_messages(message, uname, parseInt(timestamp), "sending");
   }
   socket.emit("ready", (uname, receiver));
 });
