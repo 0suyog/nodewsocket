@@ -1,7 +1,11 @@
 var socket = io();
-socket.emit("messaging_place")
+const chat_container = document.getElementById("container");
 search_field = document.getElementById("uname_search");
 var uname = localStorage.getItem("token");
+socket.on('connect', () => {
+  socket.emit("messaging_place", { id: socket.id, uname: uname });
+  console.log(socket.id)
+})
 var receiver = null;
 search_field.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
@@ -26,11 +30,14 @@ function add_friends_in_sidebar(friend) {
     </div>
     `;
   friends_sidebar.appendChild(chat_head);
-  // !potention error incoming
-  chat_head.onclick = () => {
-    receiver = friend;
-    socket.emit("talker", friend);
-  };
+  // !potential error incoming
+  if (receiver != friend) {
+    chat_head.onclick = () => {
+      receiver = friend;
+      chat_container.innerHTML = "";
+      socket.emit("talker", friend);
+    };
+  }
 }
 
 socket.on("initial_friends", (list) => {
@@ -53,6 +60,9 @@ friends_sidebar = document.getElementById("friends");
 users_name_container = document.getElementById("users_name");
 socket.on("available", (rec) => {
   add_friends_in_sidebar(rec);
+});
+socket.on("friend_added", (fr) => {
+  add_friends_in_sidebar(fr);
 });
 
 function num_to_day(num) {
@@ -95,7 +105,6 @@ function add_messages(message, username, timestamp, type) {
   var date = String(da.getDate()).padStart(2, "0");
   var day = num_to_day(da.getDay());
   var time = da.toLocaleTimeString(undefined, options);
-  const chat_container = document.getElementById("container");
   var msg_container = document.createElement("div");
   msg_container.classList.add("message_container", `${type}`);
   msg_container.innerHTML = `<div class="username"><b>${username}</b></div>
@@ -121,7 +130,7 @@ socket.on("initial", (value) => {
       add_messages(message, receiver, parseInt(timestamp), "receiving");
     }
   }
-  socket.emit("ready", (uname, receiver));
+  socket.emit("ready", { uname, receiver });
 });
 
 socket.on("ting", (msg, username, time) => {
@@ -136,6 +145,7 @@ message_form.addEventListener("submit", (event) => {
   if (msg_cont.value) {
     let time = new Date().getTime();
     socket.emit("msg_sent", uname, receiver, msg_cont.value, time);
+    console.log("message was went but never updated or so it seems");
     msg_cont.value = "";
   }
 });

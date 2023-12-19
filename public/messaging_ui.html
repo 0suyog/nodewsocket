@@ -29,7 +29,7 @@
         .container {
             margin-top: 56px;
             background-color: #182726   ;
-            height: calc(100vh - 50px);
+            height: calc(100vh - 110px);
             width: 100%;
             position: relative;
             overflow-y: scroll;
@@ -87,24 +87,21 @@
         }
 
         #message-input {
-            width: calc(67% - 90px);
+            width: calc(67%);
             border: 1px solid #ccc;
             padding: 19px;
             padding-top:11px;
             padding-bottom:13px;
             padding-right:1px;
-            /* border-radius: 5px; */
             color:white;
             position: fixed;
             bottom: 6px;
-            left: 350px;
+            left: 310px;
             z-index: 3;
-            /* border:none; */
             border-left:none;
             border-right:none;
             border-top:none;
-
-            background-color: #182726;
+            background-color: #263b39;
 
         }
 
@@ -117,8 +114,8 @@
             width: 90px;
             cursor: pointer;
             position: fixed;
-            bottom: 8px;
-            right: 12px;
+            bottom: 2px;
+            right: -6px;
             border-radius: 4px;
             font-size: 14px;
             
@@ -292,7 +289,7 @@
             display: none;
             position: fixed;
             top: 0;
-            left: 313px;
+            left: 303px;
             width: 77%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
@@ -446,7 +443,7 @@
         #block-user {
             color:crimson;
         }
-        .messages-box-div{
+        /* .messages-box-div{
             width: calc(73% - 90px);
             border: 1px solid #ccc;
             padding: 15px;
@@ -456,11 +453,11 @@
             position: fixed;
             bottom: 6px;
             left: 321px;
-            /* z-index: 1; */
-            /* border:none; */
+            z-index: 1;-comment
+            /* border:none; -comment
             background-color: #182726;
 
-        }
+        } */
         .archive2{
             height:30px;
             padding-left:17px;
@@ -507,21 +504,20 @@
             <i class="fa fa-bars " id="menu-button"></i> 
             
             <input type="text" class="uname-search" placeholder="Search" id="uname_search">
-            <i class="fa fa-search"></i>
             <hr>
         </div>
         <div class="scrollable-content" id="friends">
             <!-- Add your users Div here to make it scrollable ! -->
             <!-- Add more content as needed -->
             <div class="chat-heads" id="clickable">
-                <div class="avatar">S</div>
+                <div class="avatar">T</div>
                 <div class="text-container">   
                     <div class="text"><b>Name</b><span><i class="fa fa-check" ></i>12:03 AM</span></div>
                     <div class="text"><b>recent message</b></div>
                 </div>
             </div>
             <div class="chat-heads" id="clickable">
-                <div class="avatar">U</div>
+                <div class="avatar">E</div>
                 <div class="text-container">
                     <div class="text">Name<span><i class="fa fa-check" ></i>12:03 AM</span></div>
                     <div class="text">recent message</div>
@@ -536,7 +532,7 @@
                 </div>
             </div>
             <div class="chat-heads" id="clickable">
-                <div class="avatar">U</div>
+                <div class="avatar">T</div>
                 <div class="text-container">
                     <div class="text">Name<span><i class="fa fa-check" ></i>12:03 AM</span></div>
                     <div class="text">recent message</div>
@@ -550,9 +546,7 @@
         <div class="nav-bar">
             <div class="users-name" id="users_name">Name</div>
             <div class="icons">
-                <i class="fa fa-phone" aria-hidden="true"></i>
                 <i class="fa fa-columns" aria-hidden="true" id="sender-info"></i>  
-                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
             </div>
             <div class="recent">Typing...</div>
         </div>
@@ -571,7 +565,7 @@
             <div class="sending message_container">
                 <div class="username"><b>name</b></div>
                 <div class="colored_portion">
-                    <div class="message">hello brother me is not fine</div>
+                    <div class="message"> hello brother me is not fine</div>
                     <div class="time">2023/01/01, Sun 12:30 PM</div>
                 </div>
             </div>
@@ -665,20 +659,6 @@
 
         
     </div>
-
-    <div class="messages-box-div" >
-        <div class="paperclip">
-            <i class="fa fa-paperclip" id="paperclip"></i>
-        </div>
-        <div class="emoji-box">
-            <i class="fa fa-smile-o" id="emoji-box"></i>
-        </div>
-        <div class="mic">
-            <i class="fa fa-microphone" id="mic"></i>
-        </div>
-    </div>
-
-
 
     <script>
         const senderCardbtn = document.getElementById('sender-info');

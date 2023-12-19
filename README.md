@@ -1,3 +1,6 @@
 # nodewsocket
+
 -this one works for now
--has a friends fucntionality cant really send message yet but friends load while logging in so thats that
+-has a friend functionality and you can talk with friends now
+-you can add friends by searching the uname of the user and if available then they will be friend and you will be able to talk to them
+-sadly no removing friends yet;>
