@@ -17,6 +17,7 @@
             <span class="subtitle">USERNAME:</span>
             <br />
             <input type="text" name="username" value="" id="username" required autofocus />
+            <p id="special_char" class="special_char">username cant contain special characters</p>
             <br />
             <span class="subtitle">PASSWORD:</span>
             <br />
@@ -42,7 +43,9 @@
       .already_exist{
         display:none;
       }
-
+      .special_char{
+        display: none;
+      }
       * {
         margin: 0;
         padding: 0;
