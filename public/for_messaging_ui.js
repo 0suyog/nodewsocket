@@ -2,10 +2,10 @@ var socket = io();
 const chat_container = document.getElementById("container");
 search_field = document.getElementById("uname_search");
 var uname = localStorage.getItem("token");
-socket.on('connect', () => {
+socket.on("connect", () => {
   socket.emit("messaging_place", { id: socket.id, uname: uname });
-  console.log(socket.id)
-})
+  console.log(socket.id);
+});
 var receiver = null;
 search_field.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
@@ -30,7 +30,6 @@ function add_friends_in_sidebar(friend) {
     </div>
     `;
   friends_sidebar.appendChild(chat_head);
-  // !potential error incoming
   if (receiver != friend) {
     chat_head.onclick = () => {
       receiver = friend;
@@ -97,7 +96,8 @@ function num_to_day(num) {
           </div>
         </div> */
 }
-function add_messages(message, username, timestamp, type) {
+function add_messages(message, username, timestamp, type, format) {
+  console.log(format);
   var da = new Date(timestamp);
   const options = { hour: "2-digit", minute: "2-digit", hour12: true };
   var year = da.getFullYear();
@@ -107,45 +107,70 @@ function add_messages(message, username, timestamp, type) {
   var time = da.toLocaleTimeString(undefined, options);
   var msg_container = document.createElement("div");
   msg_container.classList.add("message_container", `${type}`);
-  msg_container.innerHTML = `<div class="username"><b>${username}</b></div>
+  if (format == "text") {
+    msg_container.innerHTML = `<div class="username"><b>${username}</b></div>
     <div class="colored_portion">
       <div class="message">${message}</div>
       <div class="time">${year}/${month}/${date}, ${day} ${time}</div>
     </div>`;
+  } else if (format == "img") {
+    msg_container.innerHTML = `<div class="username"><b>${username}</b></div>
+    <div class="colored_portion">
+      <div class="message">
+      <img
+      class="image"
+      src=${message} />
+      </div>
+      <div class="time">${year}/${month}/${date}, ${day} ${time}</div>
+    </div>`;
+  }
   chat_container.appendChild(msg_container);
   chat_container.scrollTop = chat_container.scrollHeight;
 }
 
 var message_form = document.getElementById("form");
 var msg_cont = document.getElementById("message-input");
+var image = document.getElementById("img");
 
 socket.on("initial", (value) => {
   users_name_container.innerHTML = `${receiver}`;
   for (each in value) {
     let timestamp = each;
     let message = value[each]["message"];
+    let format = value[each]["type"];
     if (value[each]["sender"] == uname) {
-      add_messages(message, uname, parseInt(timestamp), "sending");
+      add_messages(message, uname, parseInt(timestamp), "sending", format);
     } else {
-      add_messages(message, receiver, parseInt(timestamp), "receiving");
+      add_messages(message, receiver, parseInt(timestamp), "receiving", format);
     }
   }
   socket.emit("ready", { uname, receiver });
 });
 
-socket.on("ting", (msg, username, time) => {
+socket.on("ting", (msg, username, time, type) => {
   if (username == uname) {
-    add_messages(msg, username, time, "sending");
+    add_messages(msg, username, time, "sending", type);
   } else {
-    add_messages(msg, username, time, "receiving");
+    add_messages(msg, username, time, "receiving", type);
   }
 });
+socket.on("img_received", (url) => {
+  socket.emit("msg_sent", uname, receiver, url, new Date().getTime(), "img");
+});
+
 message_form.addEventListener("submit", (event) => {
   event.preventDefault();
   if (msg_cont.value) {
     let time = new Date().getTime();
-    socket.emit("msg_sent", uname, receiver, msg_cont.value, time);
-    console.log("message was went but never updated or so it seems");
+    socket.emit("msg_sent", uname, receiver, msg_cont.value, time, "text");
+    console.log("message was sent but never updated or so it seems");
     msg_cont.value = "";
+  }
+  if (image.files.length) {
+    console.log("sukes i think");
+    socket.emit("image_incoming", uname, image.files[0], (status) => {
+      console.log(status);
+    });
+    image.value = null;
   }
 });
