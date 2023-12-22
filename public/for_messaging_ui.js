@@ -20,7 +20,6 @@ socket.on("not_available", () => {
 function add_friends_in_sidebar(friend) {
   chat_head = document.createElement("div");
   chat_head.classList.add("chat-heads");
-  // chat_head.setAttribute("name", receiver);
   chat_head.name = friend;
   chat_head.innerHTML = `
     <div class="avatar">${friend[0]}</div>
@@ -30,13 +29,15 @@ function add_friends_in_sidebar(friend) {
     </div>
     `;
   friends_sidebar.appendChild(chat_head);
-  if (receiver != friend) {
-    chat_head.onclick = () => {
+  // if (receiver != friend) {
+  chat_head.onclick = () => {
+    if (receiver != friend) {
       receiver = friend;
+      console.log("the fuck is happening");
       chat_container.innerHTML = "";
       socket.emit("talker", friend);
-    };
-  }
+    }
+  };
 }
 
 socket.on("initial_friends", (list) => {

@@ -5,3 +5,4 @@
 -you can add friends by searching the uname of the user and if available then they will be friend and you will be able to talk to them
 -sadly no removing friends yet;>
 -you can transfer images now
+-double message ni jadaina aba
