@@ -1,32 +1,30 @@
 // Import the functions you need from the SDKs you need
-
-const { initializeApp } = require("firebase/app");
-const { getDatabase } = require("firebase/database");
+var admin = require("firebase-admin");
+var private_key = require("./gottabesafe.json");
+const { getStorage } = require("firebase-admin/storage");
+// const { initializeApp } = require("firebase-admin/app");
+// const { getDatabase } = require("firebase-admin/database");
 
 // TODO: Add SDKs for Firebase products that you want to use
 
 // https://firebase.google.com/docs/web/setup#available-libraries
 
-
 // Your web app's Firebase configuration
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAUm1zl-6FPawqQo3iaVJeCAhG2QXUr98M",
-    authDomain: "tryin-8179b.firebaseapp.com",
-    databaseURL: "https://tryin-8179b-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "tryin-8179b",
-    storageBucket: "tryin-8179b.appspot.com",
-    messagingSenderId: "94925204679",
-    appId: "1:94925204679:web:ba731464cb506ca8e862e2"
-  };
-  
-
+  credential: admin.credential.cert(private_key),
+  databaseURL:
+    "https://tryin-8179b-default-rtdb.asia-southeast1.firebasedatabase.app",
+  storageBucket: "tryin-8179b.appspot.com",
+};
 
 // Initialize Firebase
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+admin.initializeApp(firebaseConfig);
+const db = admin.database();
+const bucket = getStorage().bucket();
+// const refer =fb.database().ref();
 
 module.exports = {
-  db: db
-}
+  db: db,
+  bucket: bucket,
+};

@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <title>Chat System</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        color: white;
+        background-color: #182726;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+      #img {
+        position: fixed;
+        left: 310px;
+        bottom: 52px;
+      }
+      .image {
+        width: 285px;
+      }
+
+      .chat-area {
+        /* margin-top: 50px; */
+        width: 77%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .container {
+        margin-top: 56px;
+        background-color: #182726;
+        height: calc(100vh - 110px);
+        width: 100%;
+        position: relative;
+        overflow-y: scroll;
+        overflow-x: hidden;
+      }
+
+      .message_container {
+        background-color: #182726;
+        border-style: groove;
+        border-color: black;
+        transition: all 1s;
+        width: fit-content;
+        padding: 8px 10px 0px 10px;
+        margin: 5px;
+        clear: both;
+        position: relative;
+        max-width: 40vw;
+      }
+
+      .receiving {
+        border-width: 0px 0px 0px 3px;
+        border-radius: 0px 10px 10px 0px;
+        float: left;
+        /* #32524d; */
+        background-color: hsl(165, 22%, 17%);
+      }
+
+      .sending {
+        border-radius: 10px 0px 0px 10px;
+        border-width: 0px 3px 0px 0px;
+        float: right;
+        background-color: darkslategrey;
+      }
+
+      .username {
+        color: white;
+        margin-top: 4px;
+        margin-left: 4px;
+      }
+
+      .receiving .colored_portion {
+        padding: 5px;
+        border-radius: 4px;
+      }
+
+      .sending .colored_portion {
+        padding: 5px;
+        border-radius: 4px;
+      }
+
+      .time {
+        font-size: 12px;
+        padding-top: 4px;
+        text-align: right;
+      }
+
+      #message-input {
+        width: calc(67%);
+        border: 1px solid #ccc;
+        padding: 19px;
+        padding-top: 11px;
+        padding-bottom: 13px;
+        padding-right: 1px;
+        color: white;
+        position: fixed;
+        bottom: 6px;
+        left: 310px;
+        z-index: 3;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        background-color: #263b39;
+      }
+
+      .send-button {
+        background-color: #273f3e;
+        transition: background-color 0.3s;
+        color: white;
+        border: none;
+        height: 45px;
+        width: 90px;
+        cursor: pointer;
+        position: fixed;
+        bottom: 2px;
+        right: -6px;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+
+      .scrollable-chat-list {
+        width: 23%;
+        height: 100%;
+        /* border: 2px solid #1f1f1f;; */
+        border-right-color: white;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        background-color: #213635;
+        /* margin: -6px; */
+      }
+
+      .scrollable-content {
+        margin-top: 53px;
+
+        padding: 10px;
+        padding-left: 0px;
+      }
+      .uname-search {
+        width: 220px;
+        font-size: 14px;
+        /* height: 30px; */
+        border-radius: 8px;
+
+        border: 1px solid whitesmoke;
+        padding: 5px;
+        margin-left: 8px;
+        padding-left: 15px;
+        background-color: #213635;
+        color: white;
+      }
+
+      .nav-bar {
+        background-color: #273f3e;
+        /* Background color for the fixed navbar */
+        padding: 10px;
+        position: fixed; /* Fix the navbar at the top */
+        width: 100%;
+        height: 33px;
+        z-index: 1; /* Ensure it appears above other content */
+      }
+      .chatbar-nav {
+        background-color: #213635; /* Background color for the fixed navbar */
+        padding: 10px;
+        position: fixed; /* Fix the navbar at the top */
+        width: 21.5%;
+        /* height:30px;     */
+        z-index: 1;
+        padding-bottom: 0;
+      }
+
+      .chat-heads {
+        /* border:2px solid red; */
+        cursor: pointer;
+        padding: 10px;
+        margin-bottom: 1px;
+        /* padding:0px; */
+        height: 40px;
+        /* border:2px solid red; */
+        /* background-color: darkslategrey;  */
+        display: flex;
+        align-items: center;
+        width: 94%;
+      }
+      .chat-heads:hover {
+        background: hsl(165, 38%, 35%);
+      }
+
+      .chat-heads .avatar {
+        width: 45px;
+        height: 45px;
+        background-color: #3498db; /* Background color for the avatar */
+        border-radius: 50%; /* Create a circular shape */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px; /* Adjust the font size */
+        color: white;
+      }
+      .text-container {
+        padding: 10px;
+      }
+      .text {
+        font-size: 14;
+        color: white;
+        max-width: 220px;
+        max-height: 20px;
+        overflow: hidden;
+      }
+      .recent-time {
+        font-size: 12px;
+      }
+      .text span {
+        font-size: 12px;
+        padding-left: 100px;
+      }
+      .text i {
+        padding: 5px;
+        opacity: 0;
+      }
+      .recent {
+        font-size: 12px;
+        padding-top: 4px;
+        color: #ccc;
+      }
+      .selected {
+        background-color: darkslategrey;
+      }
+      #search-icon {
+        color: red;
+        /* z-index: -1; */
+      }
+      input:focus {
+        outline: none;
+      }
+      textarea:focus {
+        outline: none;
+      }
+      .icons {
+        /* margin:10px; */
+        /* padding:10px; */
+        position: absolute;
+        top: 10px;
+        left: 940px;
+        /* padding-left:10px; */
+        font-size: 20px;
+        border-radius: 6px;
+      }
+      .icons i {
+        margin-top: 5px;
+        margin-left: 10px;
+        cursor: pointer;
+      }
+      #menu-button {
+        /* position: fixed;
+            top: 20px;
+            left: 20px; */
+        font-size: inherit;
+        cursor: pointer;
+      }
+      #menu-bar {
+        position: fixed;
+        top: 0;
+        left: -304px; /* Initially hidden to the left */
+        width: 304px;
+        height: 100%;
+        background: #213635;
+        color: white;
+        transition: left 0.2s;
+        z-index: 1;
+        overflow-y: auto;
+        padding-bottom: 10px;
+      }
+
+      /* Style for the close button */
+      #userinfo i {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 20px;
+        cursor: pointer;
+      }
+      .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 303px;
+        width: 77%;
+        height: 100%;
+        background-color: rgba(
+          0,
+          0,
+          0,
+          0.5
+        ); /* Semi-transparent black overlay */
+        transition: left 5s;
+        z-index: 2; /* Place it above other content */
+      }
+      #avatar {
+        width: 50px;
+        height: 50px;
+        background-color: #3498db; /* Background color for the avatar */
+        border-radius: 50%; /* Create a circular shape */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px; /* Adjust the font size */
+        color: white;
+        margin-top: 20px;
+        margin-left: 20px;
+      }
+      .account-info {
+        margin-top: 10px;
+        margin-left: 20px;
+        font-size: 18px;
+      }
+      .account-info span {
+        font-size: 14px;
+        color: cadetblue;
+      }
+      #hr-setting {
+        width: 90%;
+      }
+      .archive {
+        margin-left: 20px;
+        height: 30px;
+        /* border: 2px solid red; */
+        padding-top: 10px;
+        margin-right: 12px;
+      }
+      .archive:hover {
+        background: hsl(165, 38%, 35%);
+      }
+      .archive i {
+        padding-right: 20px;
+        font-size: 18px;
+        color: white;
+      }
+
+      .toggle-switch {
+        top: 4px;
+        left: 90px;
+        position: relative;
+        display: inline-block;
+        width: 40px; /* Decreased width */
+        height: 20px; /* Decreased height */
+      }
+      .toggle-switch input {
+        display: none;
+      }
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc; /* Default background color for the switch */
+        transition: 0.4s; /* Smooth transition effect */
+        border-radius: 20px; /* Adjusted border radius */
+      }
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px; /* Decreased height */
+        width: 16px; /* Decreased width */
+        left: 2px; /* Adjusted left position */
+        bottom: 2px; /* Adjusted bottom position */
+        background-color: white; /* Background color for the "on" state */
+        transition: 0.4s; /* Smooth transition effect */
+        border-radius: 50%;
+      }
+
+      input:checked + .slider {
+        background-color: #2196f3;
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(16px);
+      }
+
+      .sender-info-menu {
+        position: fixed;
+        top: 0;
+        right: -250px;
+        width: 250px;
+        height: 100%;
+        background: #213635;
+        color: white;
+        transition: left 0.2s;
+        z-index: 1;
+        overflow-y: auto;
+        /* padding-left:20px; */
+        /* padding-top:20px; */
+      }
+
+      #avatar2 {
+        width: 65px;
+        height: 65px;
+        background-color: #3498db; /* Background color for the avatar */
+        border-radius: 50%; /* Create a circular shape */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px; /* Adjust the font size */
+        color: white;
+        margin-left: 20px;
+      }
+      #userinfo {
+        padding-left: 20px;
+        margin: 0;
+        margin-top: 20px;
+        padding-bottom: 15px;
+        /* position:absolute; */
+      }
+
+      #name {
+        position: absolute;
+        left: 38%;
+        top: 75px;
+      }
+      #status {
+        position: absolute;
+        left: 38%;
+        top: 95px;
+        color: #ccc;
+        font-size: 12px;
+      }
+      .secondsection {
+        padding-left: 20px;
+      }
+      .notify {
+        display: inline;
+      }
+      .thirdsection {
+        padding-left: 20px;
+      }
+      #block-user i {
+        color: crimson;
+      }
+      #block-user {
+        color: crimson;
+      }
+      .archive2 {
+        height: 30px;
+        padding-left: 17px;
+        /* border: 2px solid red; */
+        padding-top: 10px;
+        margin-right: 12px;
+      }
+      .archive2:hover {
+        background: hsl(165, 38%, 35%);
+      }
+      .archive2 i {
+        padding-right: 20px;
+        font-size: 18px;
+        color: white;
+      }
+      #paperclip {
+        position: absolute;
+        font-size: 20px;
+        bottom: 3%;
+        left: 24.53%;
+      }
+      #emoji-box {
+        position: absolute;
+        font-size: 20px;
+        bottom: 3%;
+        right: 11%;
+      }
+      #mic {
+        position: absolute;
+        font-size: 20px;
+        bottom: 3%;
+        right: 9%;
+      }
+    </style>
+  </head>
+  <body id="body">
+    <div class="scrollable-chat-list">
+      <div class="chatbar-nav">
+        <i class="fa fa-bars" id="menu-button"></i>
+
+        <input
+          type="text"
+          class="uname-search"
+          placeholder="Search"
+          id="uname_search" />
+        <hr />
+      </div>
+      <div class="scrollable-content" id="friends">
+        <!-- Add your users Div here to make it scrollable ! -->
+        <!-- Add more content as needed -->
+        <div class="chat-heads" id="clickable">
+          <div class="avatar">T</div>
+          <div class="text-container">
+            <div class="text">
+              <b>Name</b><span><i class="fa fa-check"></i>12:03 AM</span>
+            </div>
+            <div class="text"><b>recent message</b></div>
+          </div>
+        </div>
+        <div class="chat-heads" id="clickable">
+          <div class="avatar">E</div>
+          <div class="text-container">
+            <div class="text">
+              Name<span><i class="fa fa-check"></i>12:03 AM</span>
+            </div>
+            <div class="text">recent message</div>
+          </div>
+        </div>
+        <div class="chat-heads" id="clickable">
+          <div class="avatar">S</div>
+          <div class="text-container">
+            <div class="text">
+              Name<span><i class="fa fa-check"></i>12:03 AM</span>
+            </div>
+            <div class="text">recent message</div>
+          </div>
+        </div>
+        <div class="chat-heads" id="clickable">
+          <div class="avatar">T</div>
+          <div class="text-container">
+            <div class="text">
+              Name<span><i class="fa fa-check"></i>12:03 AM</span>
+            </div>
+            <div class="text">recent message</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-area">
+      <div class="nav-bar">
+        <div class="users-name" id="users_name">Name</div>
+        <div class="icons">
+          <i class="fa fa-columns" aria-hidden="true" id="sender-info"></i>
+        </div>
+        <div class="recent">Typing...</div>
+      </div>
+
+      <div class="overlay" id="overlay"></div>
+
+      <div id="container" class="container">
+        <div class="receiving message_container">
+          <div class="username"><b>name</b></div>
+          <div class="colored_portion">
+            <div class="message">hello brother me is not fine</div>
+            <div class="time">2023/01/01, Sun 12:30 PM</div>
+          </div>
+        </div>
+
+        <div class="sending message_container">
+          <div class="username"><b>name</b></div>
+          <div class="colored_portion">
+            <div class="message">hello brother me is not fine</div>
+            <div class="time">2023/01/01, Sun 12:30 PM</div>
+          </div>
+        </div>
+
+        <div class="receiving message_container">
+          <div class="username"><b>name</b></div>
+          <div class="colored_portion">
+            <div class="message">
+              <img
+                class="image"
+                src="https://firebasestorage.googleapis.com/v0/b/tryin-8179b.appspot.com/o/suyog%2F1703190192035.jpg?alt=media&token=53e85982-80f1-4f8b-8e3f-6b92cf295324" />
+            </div>
+            <div class="time">2023/01/01, Sun 12:30 PM</div>
+          </div>
+        </div>
+
+        <div class="sending message_container">
+          <div class="username"><b>name</b></div>
+          <div class="colored_portion">
+            <div class="message">
+              <img
+                class="image"
+                src="https://firebasestorage.googleapis.com/v0/b/tryin-8179b.appspot.com/o/suyog%2F1703190192035.jpg?alt=media&token=53e85982-80f1-4f8b-8e3f-6b92cf295324" />
+            </div>
+            <div class="time">2023/01/01, Sun 12:30 PM</div>
+          </div>
+        </div>
+
+        <!-- Add more chat content as needed -->
+      </div>
+
+      <form action="" id="form">
+        <input
+          type="text"
+          id="message-input"
+          name="message"
+          placeholder="Type your message"
+          required
+          autofocus />
+        <button type="submit" class="send-button">
+          Send <i class="fa fa-send-o"></i>
+        </button>
+        <input type="file" id="img" />
+        <button id="send-image" class="send-button" style="bottom: 53px">
+          send image
+        </button>
+      </form>
+    </div>
+
+    <div class="menu-bar" id="menu-bar">
+      <div id="avatar">U</div>
+      <div class="account-info">
+        Name<br />
+        <span>Status info</span>
+      </div>
+
+      <hr id="hr-setting" />
+
+      <div class="archive">
+        <i class="fa fa-archive" aria-hidden="true"></i>Archived Chats
+      </div>
+
+      <hr id="hr-setting" />
+
+      <div class="archive">
+        <i class="fa fa-users" aria-hidden="true"></i>New Group
+      </div>
+
+      <div class="archive">
+        <i class="fa fa-user-circle" aria-hidden="true"></i>Contacts
+      </div>
+
+      <div class="archive">
+        <i class="fa fa-phone" aria-hidden="true"></i>Calls
+      </div>
+
+      <div class="archive">
+        <i class="fa fa-bookmark-o" aria-hidden="true"></i>Saved
+      </div>
+
+      <div class="archive">
+        <i class="fa fa-gear" id="gear" aria-hidden="true"></i>Settings
+      </div>
+
+      <div class="archive" id="night-mode">
+        <i class="fa fa-moon-o" aria-hidden="true"></i>Night Mode
+        <label class="toggle-switch" id="slider">
+          <input type="checkbox" id="toggle" />
+          <span class="slider" id="slider1"></span>
+        </label>
+      </div>
+      <!-- Close button to slide the menu back to its original position -->
+      <!-- <i class="fa fa-times close-button" id="close-button"></i> -->
+      <!-- Add menu items here -->
+      <!-- Example: <a href="#">Item 1</a> -->
+    </div>
+
+    <div class="sender-info-menu" id="sender-info-menu">
+      <!-- <p>User Info</p> -->
+      <p id="userinfo">
+        User Info <i class="fa fa-close" id="close-button"></i>
+      </p>
+      <div class="firstsection">
+        <div class="card_avatar" id="avatar2">N</div>
+        <span id="name">Name</span>
+        <span id="status">Offline</span>
+        <hr class="hr-card" />
+      </div>
+      <div class="secondsection">
+        <!-- <div class="notification"><i class="fa fa-bell" id="notify-icon"></i>Notification</div><br> -->
+        <div class="archive2"><i class="fa fa-bell"></i> Notification</div>
+        <div class="archive2"><i class="fa fa-photo"></i> Images</div>
+
+        <div class="archive2"><i class="fa fa-link"></i>Shared Links</div>
+      </div>
+      <hr class="hr-card" />
+      <div class="thirdsection">
+        <div class="archive2">
+          <i class="fa fa-share"></i>Share this contact
+        </div>
+        <div class="archive2" id="block-user">
+          <i class="fa fa-hand-stop-o"></i>Block user
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const senderCardbtn = document.getElementById("sender-info");
+      const card = document.getElementById("sender-info-menu");
+      const close_btn = document.getElementById("close-button");
+      senderCardbtn.addEventListener("click", () => {
+        card.style.right = "0px";
+        overlay.style.display = "block";
+        // console.log('hi')
+      });
+      close_btn.addEventListener("click", () => {
+        card.style.right = "-250px";
+      });
+      card.addEventListener("click", () => {
+        event.stopPropagation();
+      });
+
+      document.body.addEventListener("click", (event) => {
+        if (
+          event.target !== senderCardbtn &&
+          event.target !== card &&
+          event.target !== close_btn
+        ) {
+          card.style.right = "-250px";
+          console.log("helo");
+        }
+      });
+    </script>
+    <!-- </script> -->
+    <script>
+      const menuButton = document.getElementById("menu-button");
+      const menuBar = document.getElementById("menu-bar");
+      const closeButton = document.getElementById("close-button");
+      const overlay = document.getElementById("overlay");
+
+      menuButton.addEventListener("click", () => {
+        menuBar.style.left = "0px";
+        overlay.style.display = "block";
+      });
+
+      menuBar.addEventListener("click", (event) => {
+        // Prevent clicks inside the menu bar from propagating and closing the menu
+        event.stopPropagation();
+      });
+
+      document.body.addEventListener("click", (event) => {
+        if (event.target !== menuButton && event.target !== menuBar) {
+          menuBar.style.left = "-304px";
+          overlay.style.display = "none";
+        }
+      });
+    </script>
+
+    <script>
+      var divElements = document.querySelectorAll(".chat-heads");
+
+      // Add a click event listener to each div
+      var selectedDiv = null;
+
+      divElements.forEach(function (divElement) {
+        divElement.addEventListener("click", function () {
+          // Deselect the previously selected div (if any)
+          if (selectedDiv) {
+            selectedDiv.classList.remove("selected");
+          }
+
+          // Select the clicked div
+          divElement.classList.add("selected");
+          selectedDiv = divElement;
+        });
+
+        divElement.addEventListener("dblclick", function (event) {
+          // Prevent the default action of double-click (text selection)
+          event.preventDefault();
+          // Remove the "selected" class on double-click to deselect
+          divElement.classList.remove("selected");
+          selectedDiv = null;
+        });
+      });
+    </script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="for_messaging_ui.js"></script>
+  </body>
+</html>

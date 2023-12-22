@@ -5,45 +5,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- <link rel="stylesheet" href="register.css"> -->
-    <title>Login</title>
+    <title>Sign Up</title>
   </head>
   <body>
     <div class="flex-container">
       <div class="content-container">
         <div class="form-container">
-          <form id="form" action="">
-            <h1>Login</h1>
+          <form id="form">
+            <h1>Sign Up</h1>
             <br />
             <span class="subtitle">USERNAME:</span>
             <br />
-            <input
-              type="text"
-              name="username"
-              value=""
-              id="username"
-              required
-              autofocus
-            />
+            <input type="text" name="username" value="" id="username" required autofocus />
+            <p id="special_char" class="special_char">username cant contain special characters</p>
             <br />
-            <p id="special_char" class="special_char">
-              username cant contain special characters
-            </p>
             <span class="subtitle">PASSWORD:</span>
             <br />
-            <input type="password" name="password" value="" id="password" />
-            <br /><br />
-            <input type="submit" value="SIGN IN" class="submit-btn" />
+            <input type="password" name="password" value="" id="password"/>
+            <br />
+            <br />
+            <input type="submit" value="SIGN UP" class="submit-btn"/>
             <br />
             <p>
-              New User?
-              <a href="/register" class="login-link"
-                >Click here to Sign Up !
-              </a>
+              Already a User?
+              <a href="/login" class="login-link">Click here to login ! </a>
             </p>
           </form>
-          <div id="wrong_creds" class="worng_creds">
-            worng information retry
-          </div>
+          <div id="already_exist" class="already_exist">User already esitsts try another uname</div>
         </div>
       </div>
     </div>
@@ -52,16 +40,17 @@
       html {
         scroll-behavior: smooth;
       }
-      .worng_creds {
-        display: none;
+      .already_exist{
+        display:none;
       }
-      .special_char {
+      .special_char{
         display: none;
       }
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
       }
 
       body {
@@ -136,6 +125,7 @@
       .login-link {
         text-decoration: none;
         color: #38d39f70;
+        transition: all 1s;
       }
 
       p {
@@ -185,5 +175,5 @@
     </style>
   </body>
   <script src="/socket.io/socket.io.js"></script>
-  <script src="for_login.js"></script>
+  <script src="for_register.js"></script>
 </html>
