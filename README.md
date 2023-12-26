@@ -6,3 +6,6 @@
 -sadly no removing friends yet;>
 -you can transfer images now
 -double message ni jadaina aba
+-No double messages
+-changed db structure
+-One users message isnt shown in another one
