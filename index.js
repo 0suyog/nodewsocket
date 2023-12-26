@@ -142,22 +142,22 @@ io.on("connect", (socket) => {
 
   // this is for handling the user selected by clicking in the side bar
 
-  socket.on("talker", (receiver_) => {
-    if (receiver != receiver_) {
-      receiver = receiver_;
-      sessionname =
-        [receiver, username].sort()[0] + [receiver, username].sort()[1];
+  socket.on("talker", (uname,receiver_) => {
+    receiver = receiver_;
+    console.log("changing talker")
+      // sessionname =
+      //   [receiver, username].sort()[0] + [receiver, username].sort()[1];
 
-      db.ref("users/" + username + "/" + receiver).once("value", (snapshot) => {
-        if (snapshot.val() != null) {
-          let value = snapshot.val();
-          initial_messages.push(value);
-          // for (data in value) {
-          //   initial_messages.push({ data: value[data] });
-          // }
-        }
-      });
-      db.ref("users/" + receiver + "/" + username).once("value", (snapshot) => {
+      // db.ref("users/" + username + "/" + receiver).once("value", (snapshot) => {
+      //   if (snapshot.val() != null) {
+      //     let value = snapshot.val();
+      //     initial_messages.push(value);
+      //     // for (data in value) {
+      //     //   initial_messages.push({ data: value[data] });
+      //     // }
+      //   }
+      // });
+      db.ref("users/" + receiver + "/" + uname).once("value", (snapshot) => {
         let value = snapshot.val();
         initial_messages.push(value);
         initial_messages = {
@@ -173,51 +173,53 @@ io.on("connect", (socket) => {
         keys.sort((a, b) => {
           return a - b;
         });
-        keys.pop();
         keys.forEach((data) => {
           initial_messages[data] = temp[data];
         });
 
         // sitty code finished
-        console.log(typeof initial_messages);
         socket.emit("initial", initial_messages);
         // console.log(initial_messages);
 
         initial_messages = [];
       });
-    }
+    
   });
 
-  socket.on("msg_sent", (uname, receiver, msg, time, type) => {
-    db.ref("users/" + uname + "/" + receiver + "/" + time).set({
+  socket.on("msg_sent", async (uname, receiver, msg, time, type) => {
+    await db.ref("users/" + uname + "/" + receiver + "/" + time).set({
       message: msg,
       sender: uname,
       type: type,
     });
-    sessionname = [receiver, uname].sort()[0] + [receiver, uname].sort()[1];
-    db.ref("sessions/" + sessionname).set({
-      message: msg,
-      uname: uname,
-      time: { time: time },
-      type: type,
-    });
-    console.log("session should be updated");
+    // sessionname = [receiver, uname].sort()[0] + [receiver, uname].sort()[1];
+    // await db.ref("sessions/" + sessionname).set({
+    //   message: msg,
+    //   uname: uname,
+    //   time: { time: time },
+    //   type: type,
+    // });
+
+    socket.emit("ting", msg, uname, receiver, time, type);
+    if (users[receiver]) {
+      socket.to(users[receiver]).emit("ting", msg, uname, receiver, time, type);
+    }
   });
-  socket.on("ready", ({ uname, receiver }) => {
-    let sessionname = [receiver, uname].sort()[0] + [receiver, uname].sort()[1];
-    // console.log(uname, receiver);
-    db.ref("sessions/" + sessionname).on("value", (snapshot) => {
-      // console.log("\n\n", snapshot.val(), "\n\n");
-      if (snapshot.val())
-        socket.emit(
-          "ting",
-          snapshot.val().message,
-          snapshot.val().uname,
-          snapshot.val().time.time,
-          snapshot.val().type
-        );
-    });
-  });
+  // socket.on("ready", ({ uname, receiver }) => {
+  //   let sessionname = [receiver, uname].sort()[0] + [receiver, uname].sort()[1];
+  //   // console.log(uname, receiver);
+  //   db.ref("sessions/" + sessionname).on("value", (snapshot) => {
+  //     // console.log("\n\n", snapshot.val(), "\n\n");
+  //     if (snapshot.val())
+  //       socket.emit(
+  //         "ting",
+  //         snapshot.val().message,
+  //         snapshot.val().uname,
+  //         snapshot.val().time.time,
+  //         snapshot.val().type
+  //       );
+  //   });
+  // });
 
   socket.on("image_incoming", (uname, image, callback) => {
     // bucket.ref().child("img.jpg").getDownloadURL().then((url) => {

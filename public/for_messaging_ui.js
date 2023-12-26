@@ -2,6 +2,11 @@ var socket = io();
 const chat_container = document.getElementById("container");
 search_field = document.getElementById("uname_search");
 var uname = localStorage.getItem("token");
+let permission = null;
+Notification.requestPermission().then((res) => {
+  permission = res;
+  console.log(permission);
+});
 socket.on("connect", () => {
   socket.emit("messaging_place", { id: socket.id, uname: uname });
   console.log(socket.id);
@@ -23,7 +28,7 @@ function add_friends_in_sidebar(friend) {
   chat_head.name = friend;
   chat_head.innerHTML = `
     <div class="avatar">${friend[0]}</div>
-    <div class="text-container">   
+    <div class="text-container" id=${friend}>   
         <div class="text"><b>${friend}</b><span><i class="fa fa-check" ></i>12:03 AM</span></div>
         <div class="text"><b>this is supposed to be  recent message</b></div>
     </div>
@@ -33,15 +38,40 @@ function add_friends_in_sidebar(friend) {
   chat_head.onclick = () => {
     if (receiver != friend) {
       receiver = friend;
-      console.log("the fuck is happening");
       chat_container.innerHTML = "";
-      socket.emit("talker", friend);
+      console.log("clicked");
+      socket.emit("talker", uname, friend);
     }
   };
 }
 
+function add_recent_messages_to_sidebar(
+  msg,
+  uname_,
+  receiver_,
+  timestamp,
+  type
+) {
+  var da = new Date(timestamp);
+  const options = { hour: "2-digit", minute: "2-digit", hour12: true };
+  var time_ = da.toLocaleTimeString(undefined, options);
+  let temp = null;
+  if (uname_ == uname) {
+    temp = receiver_;
+  } else {
+    temp = uname_;
+  }
+  frnd = document.getElementById(temp);
+  if (type == "text") {
+    frnd.innerHTML = `<div class="text"><b>${temp}</b><span><i class="fa fa-check" ></i>${time_}</span></div>
+  <div class="text"><b>${msg.slice(0, 23)}</b></div>`;
+  } else if (type == "img") {
+    frnd.innerHTML = `<div class="text"><b>${temp}</b><span><i class="fa fa-check" ></i>${time_}</span></div>
+    <img class="sidebar_img" src=${msg} />`;
+  }
+}
+
 socket.on("initial_friends", (list) => {
-  console.log("am i getting here?");
   list.forEach((friend) => {
     add_friends_in_sidebar(friend);
   });
@@ -98,7 +128,6 @@ function num_to_day(num) {
         </div> */
 }
 function add_messages(message, username, timestamp, type, format) {
-  console.log(format);
   var da = new Date(timestamp);
   const options = { hour: "2-digit", minute: "2-digit", hour12: true };
   var year = da.getFullYear();
@@ -145,14 +174,20 @@ socket.on("initial", (value) => {
       add_messages(message, receiver, parseInt(timestamp), "receiving", format);
     }
   }
-  socket.emit("ready", { uname, receiver });
+  // socket.emit("ready", { username, receiver });
 });
+154;
 
-socket.on("ting", (msg, username, time, type) => {
-  if (username == uname) {
-    add_messages(msg, username, time, "sending", type);
-  } else {
-    add_messages(msg, username, time, "receiving", type);
+socket.on("ting", (msg, username, receiver_, time, type) => {
+  console.log("meowwwwww");
+  add_recent_messages_to_sidebar(msg, username, receiver_, time, type);
+  console.log(receiver, receiver_);
+  if (receiver == receiver_ || receiver==username) {
+    if (username == uname) {
+      add_messages(msg, username, time, "sending", type);
+    } else {
+      add_messages(msg, username, time, "receiving", type);
+    }
   }
 });
 socket.on("img_received", (url) => {
@@ -161,17 +196,18 @@ socket.on("img_received", (url) => {
 
 message_form.addEventListener("submit", (event) => {
   event.preventDefault();
+  if (receiver == null) {
+    alert("select someone to send message first!!!");
+    return;
+  }
   if (msg_cont.value) {
     let time = new Date().getTime();
     socket.emit("msg_sent", uname, receiver, msg_cont.value, time, "text");
-    console.log("message was sent but never updated or so it seems");
     msg_cont.value = "";
   }
   if (image.files.length) {
     console.log("sukes i think");
-    socket.emit("image_incoming", uname, image.files[0], (status) => {
-      console.log(status);
-    });
+    socket.emit("image_incoming", uname, image.files[0], (status) => {});
     image.value = null;
   }
 });
