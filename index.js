@@ -4,7 +4,7 @@ const url = require("url");
 const app = express();
 const server = http.createServer(app);
 const { Server } = require("socket.io");
-const io = new Server(server);
+const io = new Server(server, { maxHttpBufferSize: 2e7 });
 const config = require("./config");
 const db = config.db;
 const bucket = config.bucket;
@@ -107,31 +107,32 @@ io.on("connect", (socket) => {
     db.ref("friends/" + username).once("value", (snapshot) => {
       if (snapshot.val()) {
         socket.emit("initial_friends", Object.keys(snapshot.val()));
+        console.log("this shouldnt be printed twice");
       }
     });
   });
 
   // this right here checks if username searched is friend or not and if not then it adds them as friend
 
-  socket.on("receiver", (receiver_) => {
+  socket.on("receiver", (username_, receiver_) => {
     db.ref("users/" + receiver_ + "/password").once("value", (snapshot) => {
       if (snapshot.val() == null) {
         socket.emit("not_available");
       } else {
-        db.ref("friends/" + username + "/" + receiver_).once(
+        db.ref("friends/" + username_ + "/" + receiver_).once(
           "value",
           (snapshot) => {
             if (snapshot.val() == null) {
-              db.ref(`friends/${username}`).update({
+              db.ref(`friends/${username_}`).update({
                 [receiver_]: 1,
               });
               db.ref(`friends/${receiver_}`).update({
-                [username]: 1,
+                [username_]: 1,
               });
               // console.log(us)
-              io.to(users[username]).emit("available", receiver_);
+              socket.emit("available", receiver_);
               if (users[receiver_]) {
-                io.to(users[receiver_]).emit("available", username);
+                socket.to(users[receiver_]).emit("available", username_);
               }
             }
           }
@@ -142,48 +143,40 @@ io.on("connect", (socket) => {
 
   // this is for handling the user selected by clicking in the side bar
 
-  socket.on("talker", (uname,receiver_) => {
+  socket.on("talker", (uname, receiver_) => {
     receiver = receiver_;
-    console.log("changing talker")
-      // sessionname =
-      //   [receiver, username].sort()[0] + [receiver, username].sort()[1];
 
-      // db.ref("users/" + username + "/" + receiver).once("value", (snapshot) => {
-      //   if (snapshot.val() != null) {
-      //     let value = snapshot.val();
-      //     initial_messages.push(value);
-      //     // for (data in value) {
-      //     //   initial_messages.push({ data: value[data] });
-      //     // }
-      //   }
-      // });
-      db.ref("users/" + receiver + "/" + uname).once("value", (snapshot) => {
+    db.ref("users/" + username + "/" + receiver).once("value", (snapshot) => {
+      if (snapshot.val() != null) {
         let value = snapshot.val();
         initial_messages.push(value);
-        initial_messages = {
-          ...initial_messages[0],
-          ...initial_messages[1],
-        };
-        let temp = initial_messages;
-        initial_messages = {};
+      }
+    });
+    db.ref("users/" + receiver + "/" + uname).once("value", (snapshot) => {
+      let value = snapshot.val();
+      initial_messages.push(value);
+      initial_messages = {
+        ...initial_messages[0],
+        ...initial_messages[1],
+      };
+      let temp = initial_messages;
+      initial_messages = {};
+      // this following shitty lines of code sort messages dont think abt it for 1/2 hr like you did just now
+      let keys = Object.keys(temp);
 
-        // this following shitty lines of code sort messages dont think abt it for 1/2 hr like you did just now
-        let keys = Object.keys(temp);
-
-        keys.sort((a, b) => {
-          return a - b;
-        });
-        keys.forEach((data) => {
-          initial_messages[data] = temp[data];
-        });
-
-        // sitty code finished
-        socket.emit("initial", initial_messages);
-        // console.log(initial_messages);
-
-        initial_messages = [];
+      keys.sort((a, b) => {
+        return a - b;
       });
-    
+      keys.forEach((data) => {
+        initial_messages[data] = temp[data];
+      });
+
+      // sitty code finished
+      socket.emit("initial", initial_messages);
+      // console.log(initial_messages);
+
+      initial_messages = [];
+    });
   });
 
   socket.on("msg_sent", async (uname, receiver, msg, time, type) => {
@@ -221,20 +214,34 @@ io.on("connect", (socket) => {
   //   });
   // });
 
-  socket.on("image_incoming", (uname, image, callback) => {
+  socket.on("image_incoming", (uname, image, extension, callback) => {
     // bucket.ref().child("img.jpg").getDownloadURL().then((url) => {
     //   console.log(url);
     // })
-
     let time = new Date().getTime();
     bucket
-      .file(`${uname}/${time}.jpg`)
+      .file(`${uname}/${time}.${extension}`)
       .save(image)
       .then(() => {
-        getDownloadURL(bucket.file(`${uname}/${time}.jpg`)).then((url) => {
-          socket.emit("img_received", url);
-        });
+        getDownloadURL(bucket.file(`${uname}/${time}.${extension}`)).then(
+          (url) => {
+            socket.emit("img_received", url);
+          }
+        );
       });
+    callback("success");
+  });
+
+  // for typing
+  socket.on("typing", (receiver,uname_) => {
+    if (users[receiver]) {
+      socket.to(users[receiver]).emit("is_typing",uname_);
+    }
+  });
+  socket.on("not_typing", (receiver,uname_) => {
+    if (users[receiver]) {
+      socket.to(users[receiver]).emit("isnt_typing",uname_);
+    }
   });
 });
 

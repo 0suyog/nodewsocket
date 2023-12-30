@@ -7,14 +7,14 @@ Notification.requestPermission().then((res) => {
   permission = res;
   console.log(permission);
 });
-socket.on("connect", () => {
+socket.once("connect", () => {
   socket.emit("messaging_place", { id: socket.id, uname: uname });
   console.log(socket.id);
 });
 var receiver = null;
 search_field.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
-    socket.emit("receiver", search_field.value);
+    socket.emit("receiver", uname, search_field.value);
   }
 });
 
@@ -72,6 +72,7 @@ function add_recent_messages_to_sidebar(
 }
 
 socket.on("initial_friends", (list) => {
+  console.log("this shouldnt be printed twice");
   list.forEach((friend) => {
     add_friends_in_sidebar(friend);
   });
@@ -176,13 +177,12 @@ socket.on("initial", (value) => {
   }
   // socket.emit("ready", { username, receiver });
 });
-154;
 
 socket.on("ting", (msg, username, receiver_, time, type) => {
   console.log("meowwwwww");
   add_recent_messages_to_sidebar(msg, username, receiver_, time, type);
   console.log(receiver, receiver_);
-  if (receiver == receiver_ || receiver==username) {
+  if (receiver == receiver_ || receiver == username) {
     if (username == uname) {
       add_messages(msg, username, time, "sending", type);
     } else {
@@ -206,8 +206,40 @@ message_form.addEventListener("submit", (event) => {
     msg_cont.value = "";
   }
   if (image.files.length) {
-    console.log("sukes i think");
-    socket.emit("image_incoming", uname, image.files[0], (status) => {});
+    extension = image.value.split(".").pop().toLowerCase();
+    socket.emit(
+      "image_incoming",
+      uname,
+      image.files[0],
+      extension,
+      (status) => {
+        console.log(status);
+      }
+    );
     image.value = null;
+  }
+});
+istyping = false;
+// send that m typing
+setInterval(() => {
+  if (msg_cont.value && !istyping) {
+    console.log("lekhiraxa");
+    socket.emit("typing", receiver, uname);
+    istyping = true;
+  } else if (msg_cont.value == "" && istyping) {
+    socket.emit("not_typing", receiver, uname);
+    istyping = false;
+  }
+}, 3 * 1000);
+
+socket.on("is_typing", (uname_) => {
+  if (receiver == uname_) {
+    console.log("arko ni lekhiraxa");
+    document.getElementById("state").innerHTML = "typing...";
+  }
+});
+socket.on("isnt_typing", (uname_) => {
+  if (receiver == uname_) {
+    document.getElementById("state").innerHTML = "not typing...";
   }
 });

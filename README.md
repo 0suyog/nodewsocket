@@ -9,3 +9,6 @@
 -No double messages
 -changed db structure
 -One users message isnt shown in another one
+-fixed friends showing up on others account
+-you can send gifssssssssssssssssssssssss
+-shows typing or not
