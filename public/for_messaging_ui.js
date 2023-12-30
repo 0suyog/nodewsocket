@@ -40,6 +40,7 @@ function add_friends_in_sidebar(friend) {
       receiver = friend;
       chat_container.innerHTML = "";
       console.log("clicked");
+      msg_cont.disabled = false;
       socket.emit("talker", uname, friend);
     }
   };
