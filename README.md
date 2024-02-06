@@ -12,3 +12,8 @@
 -fixed friends showing up on others account
 -you can send gifssssssssssssssssssssssss
 -shows typing or not
+-fixed messaging ui
+-fixed minor bugs like
+    -always alerting helo while another person is typing
+    -the typing indicator had time
+    

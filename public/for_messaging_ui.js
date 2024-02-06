@@ -33,6 +33,7 @@ message_field.addEventListener("keydown", (event) => {
           "text"
         );
         message_field.value = "";
+        socket.emit("not_typing", receiver, uname);
       }
     } else {
       alert("noone to send message");
@@ -106,7 +107,6 @@ function add_messages(message, username, timestamp, type, format) {
 function typing(state) {
   console.log(state);
   if (state && document.getElementById("typing") == null) {
-    alert("helo");
     let typing_ = document.createElement("div");
     typing_.classList.add("totalcontainerrec");
     typing_.id = "typing";
@@ -115,9 +115,7 @@ function typing(state) {
       <span id="first">.</span><span id="sec">.</span
       ><span id="third">.</span>
     </div>
-    <div class="timestamp1">
-      <i class="fa-regular fa-clock"></i>11:58
-    </div>`;
+    `;
     parent_message_container.appendChild(typing_);
     parent_message_container.scrollTop = parent_message_container.scrollHeight;
   } else if (!state && document.getElementById("typing") != null) {
