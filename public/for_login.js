@@ -9,7 +9,6 @@ var special_char = document.getElementById("special_char");
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
-  console.log("meow");
   socket.emit("credentials", username.value, password.value);
 });
 

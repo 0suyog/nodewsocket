@@ -1,745 +1,1521 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <link rel="shortcut icon" href="sangalo.jpg" type="image/x-icon" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-    <title>Chat System</title>
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer" />
+    <link
+      href="https://fonts.cdnfonts.com/css/helvetica-neue-55"
+      rel="stylesheet" />
+    <title>Document</title>
+  </head>
+
+  <body id="body" onresize="resizefun()">
+    <div class="sidebar" id="sidebar">
+      <div class="logo">
+        <div class="imageContainer">
+          <!-- <img class="logoimage" src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909__340.png"> -->
+          <img
+            class="logoimage"
+            src="https://themesbrand.com/chatvia/layouts/assets/images/logo.svg" />
+        </div>
+      </div>
+
+      <div class="items">
+        <div class="usersdiv">
+          <i class="fa-solid fa-user" id="user"></i>
+          <span class="tooltiptext">Profile</span>
+        </div>
+        <div class="chatdiv">
+          <i class="fa-solid fa-comment-dots" id="chats"></i>
+          <span class="tooltiptext">Chats</span>
+        </div>
+        <div class="groupdiv">
+          <i class="fa-solid fa-people-group" id="group"></i>
+          <span class="tooltiptext">Groups</span>
+        </div>
+        <div class="usergroup">
+          <i class="fa-solid fa-user-group" id="contact"></i>
+          <span class="tooltiptext">Contacts</span>
+        </div>
+        <div class="settings">
+          <i class="fa-solid fa-gear" id="settings"></i>
+          <span class="tooltiptext">Settings</span>
+        </div>
+      </div>
+
+      <div class="avatargroup">
+        <div class="sun">
+          <i class="fa-regular fa-sun" id="sun"></i>
+          <span class="tooltiptext">Light/Dark Mode</span>
+        </div>
+        <i class="fa-solid fa-moon" id="moon"></i>
+
+        <div class="avatar">
+          <div class="imageContainer">
+            <img
+              class="logoimage" id="profile_img"
+              src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909__340.png" />
+            <!-- <img class="logoimage" src="https://themesbrand.com/chatvia/layouts/assets/images/logo.svg"> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chatlist" id="chatlist">
+      <div class="chats">Chats</div>
+      <div class="search">
+        <i class="fa-solid fa-magnifying-glass" id="mgicon"></i>
+        <input
+          type="text"
+          class="searchinp"
+          id="uname_search"
+          placeholder="Search messages or users" />
+      </div>
+      <div class="online">
+        <div class="user1">
+          <div class="innerdiv">
+            <a href="">
+              <div class="status">
+                <span class="statusicon"></span>
+                <img
+                  src="https://themesbrand.com/chatvia/layouts/assets/images/users/avatar-2.jpg"
+                  id="image1"
+                  alt="" />
+              </div>
+              <div class="name">David</div>
+            </a>
+          </div>
+        </div>
+        <div class="user1">
+          <div class="innerdiv">
+            <a href="">
+              <div class="status">
+                <span class="statusicon"></span>
+                <img
+                  src="https://themesbrand.com/chatvia/layouts/assets/images/users/avatar-2.jpg"
+                  id="image1"
+                  alt="" />
+              </div>
+              <div class="name">David</div>
+            </a>
+          </div>
+        </div>
+        <div class="user1">
+          <div class="innerdiv">
+            <a href="">
+              <div class="status">
+                <span class="statusicon"></span>
+                <img
+                  src="https://themesbrand.com/chatvia/layouts/assets/images/users/avatar-2.jpg"
+                  id="image1"
+                  alt="" />
+              </div>
+              <div class="name">David</div>
+            </a>
+          </div>
+        </div>
+        <div class="user1">
+          <div class="innerdiv">
+            <a href="">
+              <div class="status">
+                <span class="statusicon"></span>
+                <img
+                  src="https://themesbrand.com/chatvia/layouts/assets/images/users/avatar-2.jpg"
+                  id="image1"
+                  alt="" />
+              </div>
+              <div class="name">David</div>
+            </a>
+          </div>
+        </div>
+        <div class="user1">
+          <div class="innerdiv">
+            <a href="">
+              <div class="status">
+                <span class="statusicon"></span>
+                <img
+                  src="https://themesbrand.com/chatvia/layouts/assets/images/users/avatar-2.jpg"
+                  id="image1"
+                  alt="" />
+              </div>
+              <div class="name">David</div>
+            </a>
+          </div>
+        </div>
+        <div class="user1">
+          <div class="innerdiv">
+            <a href="">
+              <div class="status">
+                <span class="statusicon"></span>
+                <img
+                  src="https://themesbrand.com/chatvia/layouts/assets/images/users/avatar-2.jpg"
+                  id="image1"
+                  alt="" />
+              </div>
+              <div class="name">David</div>
+            </a>
+          </div>
+        </div>
+        <div class="user1">
+          <div class="innerdiv">
+            <a href="">
+              <div class="status">
+                <span class="statusicon"></span>
+                <img
+                  src="https://themesbrand.com/chatvia/layouts/assets/images/users/avatar-2.jpg"
+                  id="image1"
+                  alt="" />
+              </div>
+              <div class="name">David</div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="recent">Recent</div>
+
+      <div class="chatmodels" id="sidebar_users">
+        <a href="#" id="david" onclick="clicking_user()">
+          <div class="model1">
+            <div class="useravatar">
+              <div class="status">
+                <span class="statusicon"></span>
+                <img
+                  src="https://themesbrand.com/chatvia/layouts/assets/images/users/avatar-3.jpg"
+                  id="image1"
+                  alt="" />
+              </div>
+            </div>
+            <div class="uname_msg">
+              <div class="username">David Gogins</div>
+              <div class="message">
+                You: I am not racist, youre ugly what can i do about that ?
+                please stop calling me a racist ok ?
+              </div>
+              <div class="timestamp">12 min</div>
+              <div class="unread">
+                <span>2</span>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <!-- <a href="#">
+          <div class="model1">
+            <div class="useravatar">
+              <img
+                src="https://themesbrand.com/chatvia/layouts/assets/images/users/avatar-3.jpg"
+                id="image1"
+                alt="" />
+            </div>
+            <div class="uname_msg">
+              <div class="username">Json Kale</div>
+              <div class="message">
+                You: I am not racist, youre ugly what can i do about that ?
+                please stop calling me a racist ok ?
+              </div>
+              <div class="timestamp">12 min</div>
+            </div>
+          </div>
+        </a>
+        <a href="#">
+          <div class="model1">
+            <div class="useravatar">
+              <img
+                src="https://themesbrand.com/chatvia/layouts/assets/images/users/avatar-3.jpg"
+                id="image1"
+                alt="" />
+            </div>
+            <div class="uname_msg">
+              <div class="username">Json Kale</div>
+              <div class="message">
+                You: I am not racist, youre ugly what can i do about that ?
+                please stop calling me a racist ok ?
+              </div>
+              <div class="timestamp">12 min</div>
+            </div>
+          </div>
+        </a>
+        <a href="#">
+          <div class="model1">
+            <div class="useravatar">
+              <img
+                src="https://themesbrand.com/chatvia/layouts/assets/images/users/avatar-3.jpg"
+                id="image1"
+                alt="" />
+            </div>
+            <div class="uname_msg">
+              <div class="username">Json Kale</div>
+              <div class="message">
+                You: I am not racist, youre ugly what can i do about that ?
+                please stop calling me a racist ok ?
+              </div>
+              <div class="timestamp">12 min</div>
+            </div>
+          </div>
+        </a>
+        <a href="#">
+          <div class="model1">
+            <div class="useravatar">
+              <img
+                src="https://themesbrand.com/chatvia/layouts/assets/images/users/avatar-3.jpg"
+                id="image1"
+                alt="" />
+            </div>
+            <div class="uname_msg">
+              <div class="username">Json Kale</div>
+              <div class="message">
+                You: I am not racist, youre ugly what can i do about that ?
+                please stop calling me a racist ok ?
+              </div>
+              <div class="timestamp">12 min</div>
+            </div>
+          </div>
+        </a>
+        <a href="#">
+          <div class="model1">
+            <div class="useravatar">
+              <img
+                src="https://themesbrand.com/chatvia/layouts/assets/images/users/avatar-3.jpg"
+                id="image1"
+                alt="" />
+            </div>
+            <div class="uname_msg">
+              <div class="username">Json Kale</div>
+              <div class="message">
+                You: I am not racist, youre ugly what can i do about that ?
+                please stop calling me a racist ok ?
+              </div>
+              <div class="timestamp">12 min</div>
+            </div>
+          </div>
+        </a> -->
+      </div>
+    </div>
+
+    <div class="chatArea" id="chatArea">
+      <div class="noMessageSelectedText" id="notselected">
+        Select a chat to start messaging !
+      </div>
+
+      <div class="topappbar" id="topappbar">
+        <div class="avatar1">
+          <div class="backbtn" id="backbtn">
+            <i class="fa-solid fa-arrow-left"></i>
+          </div>
+          <div class="imageContainer2">
+            <img
+              class="logoimage"
+              id="topbar_profile_img"
+              src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909__340.png" />
+          </div>
+          <div class="topbarusername" id="top_uname">David Googins</div>
+          <div class="topbarstatus">
+            <span class="statusicon2" id="topbarstatusicon"></span>
+          </div>
+        </div>
+        <div class="topappbaritems">
+          <i class="fa-solid fa-magnifying-glass" id="mgicon2"></i>
+          <i class="fa-solid fa-user" id="user"></i>
+          <i class="fa-solid fa-phone"></i>
+          <i class="fa-solid fa-video"></i>
+          <i class="fa-solid fa-ellipsis"></i>
+        </div>
+      </div>
+      <hr id="hr" />
+
+      <div class="messages" id="message_view">
+        <div class="totalcontainersend">
+          <div class="msgcontainersend">
+            <div class="msgsend">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias
+              quaerat distinctio non quod. Ipsum, quasi! Odit qui nesciunt
+              quibusdam corrupti veritatis, neque doloribus reprehenderit
+              blanditiis, aliquam ut eum voluptatibus illo! Obcaecati et
+              veritatis, impedit vero velit tempora repellendus neque eum hic
+              adipisci quidem minus nihil ex quia cupiditate? Officiis
+              consectetur, autem sunt voluptatem harum inventore eligendi?
+              Suscipit id odit molestias. Atque, architecto cum id quia eaque
+              voluptates. Dolor aperiam id, suscipit tempore sit alias
+              distinctio! Enim ea rerum magnam sequi nulla molestias dolore eos
+              suscipit ipsum inventore, dolores ratadsfasdfadsfadsfadsfadsfione
+              maxime?
+            </div>
+            <div class="timestamp1">
+              <i class="fa-regular fa-clock"></i>11:58
+            </div>
+          </div>
+        </div>
+
+        <div class="totalcontainersend">
+          <div class="msgcontainersend">
+            <div class="msgsend">Hey!</div>
+            <div class="timestamp1">
+              <i class="fa-regular fa-clock"></i>11:58
+            </div>
+          </div>
+        </div>
+
+        <div class="totalcontainerrec">
+          <div class="msgcontainerrec">
+            <div class="msgrec">
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsam
+              saepe rem illo, excepturi obcaecati corporis minima inventore
+              omnis explicabo vero accusantium iste enim repellat numquam
+              distinctio impedit dicta, doloribus ullam! Quasi aliquid porro
+              impedit atque, in omnis facere illum voluptatum enim vitae!
+              Mollitia, placeat aliquam ab enim incidunt libero modi
+              exercitationem pariatur adipisci id dignissimos, quasi expedita
+              facere hic. Inventore. Similique voluptates ad tempora
+              reprehenderit accusamus, iure optio recusandae voluptatibus at, id
+              quisquam dolorem quis natus ipsum ipsa suscipit cumque.
+              Consequatur temporibus fugiat eveniet sunt animi modi nostrum
+              commodi dolore.!
+            </div>
+            <div class="timestamp1">
+              <i class="fa-regular fa-clock"></i>11:58
+            </div>
+          </div>
+        </div>
+        <div class="totalcontainerrec" id="typing">
+          <div class="msgcontainerrec">
+            <div class="msgrec msgrectyp">
+              <span id="first">.</span><span id="sec">.</span
+              ><span id="third">.</span>
+            </div>
+            <div class="timestamp1">
+              <i class="fa-regular fa-clock"></i>11:58
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="messagebox" id="messsagebox">
+        <div class="msgboxcontents">
+          <input type="text" id="messagebox" placeholder="Enter Message..." />
+          <div class="msgboxitems">
+            <i class="fa-regular fa-face-smile"></i>
+            <i class="fa-solid fa-paperclip"></i>
+            <i class="fa-solid fa-paper-plane"></i>
+          </div>
+        </div>
+      </div>
+    </div>
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
+      * {
         padding: 0;
-        color: white;
-        background-color: #182726;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
         margin: 0;
-      }
-      #img {
-        position: fixed;
-        left: 310px;
-        bottom: 52px;
-      }
-      .image {
-        width: 285px;
-      }
-      .sidebar_img {
-        width: 27px;
       }
 
-      .chat-area {
-        /* margin-top: 50px; */
-        width: 77%;
-        height: 100%;
+      html {
+        height: -webkit-fill-available;
+      }
+
+      body {
         display: flex;
+        color: white;
+        font-family: "Helvetica Neue";
+        height: -webkit-fill-available;
+      }
+
+      .sidebar {
+        box-sizing: border-box;
+        height: 100vh;
+        width: 5vw;
+        background-color: #36404a;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         flex-direction: column;
         overflow: hidden;
+        min-height: 50px;
+      }
+      .sidebar i:hover {
+        color: #7269ef;
       }
 
-      .container {
-        margin-top: 56px;
-        background-color: #182726;
-        height: calc(100vh - 110px);
-        width: 100%;
+      .chatlist input {
+        max-width: 300px;
+        width: 270px;
+        font-size: 16px;
+      }
+
+      input::placeholder {
+        font-size: 16px;
+      }
+
+      .logo {
+        background-color: inherit;
+        height: max-content;
+      }
+
+      .imageContainer {
+        /* margin-top: 50px; */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: inherit;
+      }
+
+      .logoimage {
+        border-radius: 50%;
+        height: 6vh;
+        width: 6vh;
+        background-color: inherit;
+      }
+
+      .items {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        height: fit-content;
+        color: white;
+        font-size: x-large;
+        background-color: inherit;
+      }
+      .avatargroup {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        gap: 1rem;
+        /* margin-top0px; */
+        /* gap: 1rem; */
+      }
+      .avatargroup .fa-moon {
+        display: none;
+      }
+
+      .avatar {
+        margin-top: 10px;
+      }
+
+      .usersdiv,
+      .chatdiv,
+      .groupdiv,
+      .usergroup,
+      .settings,
+      .avatar {
+        /* padding: 10px; */
+        padding-bottom: 30px;
+        font-size: 25px;
+        background-color: inherit;
+        outline: none;
+      }
+
+      .tooltiptext {
+        visibility: hidden;
+        width: 100px;
+        background-color: #fcfbf4;
+        color: #1f1f1f;
+        text-align: center;
+        border-radius: 6px;
+        font-size: medium;
+        padding: 5px 0;
+        margin-left: 10px;
+
+        /* Position the tooltip */
+        position: absolute;
+        z-index: 6;
+      }
+
+      #user:hover + .tooltiptext,
+      #chats:hover + .tooltiptext,
+      #group:hover + .tooltiptext,
+      #contact:hover + .tooltiptext,
+      #settings:hover + .tooltiptext,
+      #sun:hover + .tooltiptext {
+        visibility: visible;
+        color: #1f1f1f;
+      }
+
+      i {
+        cursor: pointer;
+      }
+      .sidebar i {
+        color: #a6b0cf;
+        font-size: 22px;
+      }
+      .chatlist {
+        width: 30vw;
+        height: 100vh;
+        background-color: #303841;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+
+      .chats {
+        font-size: larger;
+        background-color: inherit;
+        padding-bottom: 20px;
+      }
+
+      .search {
+        display: flex;
+        background-color: #36404a;
+        padding: 10px;
+      }
+
+      #mgicon {
+        padding-right: 10px;
+      }
+
+      .search .searchinp {
+        background-color: inherit;
+        color: #abb4d2;
+        border: none;
+        outline: none;
+      }
+
+      .searchinp::placeholder {
+        color: #abb4d2;
+      }
+
+      .online {
+        margin-top: 20px;
+        background-color: inherit;
+        text-align: center;
+        display: flex;
+        overflow-x: auto;
+        justify-content: flex-start;
+        overflow-y: hidden;
+        height: max-content;
+      }
+
+      .online::-webkit-scrollbar {
+        display: none;
+      }
+
+      .online {
+        background-color: inherit;
+        -ms-overflow-style: none;
+        /* IE and Edge */
+        scrollbar-width: none;
+        /* Firefox */
+        box-sizing: border-box;
+      }
+
+      .user1 {
+        margin-right: 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 15px;
+        border-radius: 8px;
+        background-color: #36404a;
+        min-width: 80px;
+
+        border-radius: 8px;
+      }
+
+      img {
+        border-radius: 50%;
+        height: 50px;
+        width: 50px;
+        background-color: inherit;
+      }
+
+      .innerdiv,
+      .status,
+      .name {
+        background-color: inherit;
+      }
+
+      .status {
         position: relative;
-        overflow-y: scroll;
-        overflow-x: hidden;
       }
 
-      .message_container {
-        background-color: #182726;
-        border-style: groove;
-        border-color: black;
-        transition: all 1s;
+      .statusicon {
+        position: absolute;
+        display: block;
+        /* background-color: #06d6a0; */
+        background-color: #95A4A7;
+        z-index: 5;
+        height: 7px;
+        width: 7px;
+        border-radius: 50%;
+        bottom: 12%;
+        left: auto;
+        right: 0;
+      }
+
+      .user1 {
+        margin-bottom: 20px;
+      }
+
+      .recent {
+        margin-top: 15px;
+        height: min-content;
+        width: min-content;
+        background-color: inherit;
+        font-size: large;
+        margin-bottom: 15px;
+      }
+
+      .chatmodels {
+        background-color: #303841;
+        overflow: scroll;
+        height: 55vh;
+        box-sizing: border-box;
+      }
+
+      .chatmodels::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* Hide scrollbar for IE, Edge and Firefox */
+      .chatmodels {
+        -ms-overflow-style: none;
+        /* IE and Edge */
+        scrollbar-width: none;
+        /* Firefox */
+      }
+
+      .model1 {
+        position: relative;
+        /* Add position relative to allow absolute positioning of .time-container */
+        background-color: inherit;
+        display: flex;
+        margin-bottom: 5px;
+        box-sizing: border-box;
+      }
+
+      a {
+        text-decoration: none;
+        background-color: inherit;
+        color: white;
+      }
+
+      a:hover {
+        background-color: #36404a;
+      }
+
+      .useravatar {
+        background-color: inherit;
+        padding: 10px;
         width: fit-content;
-        padding: 8px 10px 0px 10px;
-        margin: 5px;
-        clear: both;
-        position: relative;
-        max-width: 40vw;
       }
 
-      .receiving {
-        border-width: 0px 0px 0px 3px;
-        border-radius: 0px 10px 10px 0px;
-        float: left;
-        /* #32524d; */
-        background-color: hsl(165, 22%, 17%);
-      }
-
-      .sending {
-        border-radius: 10px 0px 0px 10px;
-        border-width: 0px 3px 0px 0px;
-        float: right;
-        background-color: darkslategrey;
+      .uname_msg {
+        margin-top: 10px;
+        height: fit-content;
+        background-color: inherit;
       }
 
       .username {
-        color: white;
-        margin-top: 4px;
-        margin-left: 4px;
+        background-color: inherit;
       }
 
-      .receiving .colored_portion {
-        padding: 5px;
-        border-radius: 4px;
-      }
-
-      .sending .colored_portion {
-        padding: 5px;
-        border-radius: 4px;
-      }
-
-      .time {
-        font-size: 12px;
-        padding-top: 4px;
-        text-align: right;
-      }
-
-      #message-input {
-        width: calc(67%);
-        border: 1px solid #ccc;
-        padding: 19px;
-        padding-top: 11px;
-        padding-bottom: 13px;
-        padding-right: 1px;
-        color: white;
-        position: fixed;
-        bottom: 6px;
-        left: 310px;
-        z-index: 3;
-        border-left: none;
-        border-right: none;
-        border-top: none;
-        background-color: #263b39;
-      }
-
-      .send-button {
-        background-color: #273f3e;
-        transition: background-color 0.3s;
-        color: white;
-        border: none;
-        height: 45px;
-        width: 90px;
-        cursor: pointer;
-        position: fixed;
-        bottom: 2px;
-        right: -6px;
-        border-radius: 4px;
-        font-size: 14px;
-      }
-
-      .scrollable-chat-list {
-        width: 23%;
-        height: 100%;
-        /* border: 2px solid #1f1f1f;; */
-        border-right-color: white;
-        overflow-x: hidden;
-        overflow-y: scroll;
-        background-color: #213635;
-        /* margin: -6px; */
-      }
-
-      .scrollable-content {
-        margin-top: 53px;
-
-        padding: 10px;
-        padding-left: 0px;
-      }
-      .uname-search {
-        width: 220px;
-        font-size: 14px;
-        /* height: 30px; */
-        border-radius: 8px;
-
-        border: 1px solid whitesmoke;
-        padding: 5px;
-        margin-left: 8px;
-        padding-left: 15px;
-        background-color: #213635;
-        color: white;
-      }
-
-      .nav-bar {
-        background-color: #273f3e;
-        /* Background color for the fixed navbar */
-        padding: 10px;
-        position: fixed; /* Fix the navbar at the top */
-        width: 100%;
-        height: 33px;
-        z-index: 1; /* Ensure it appears above other content */
-      }
-      .chatbar-nav {
-        background-color: #213635; /* Background color for the fixed navbar */
-        padding: 10px;
-        position: fixed; /* Fix the navbar at the top */
-        width: 21.5%;
-        /* height:30px;     */
-        z-index: 1;
-        padding-bottom: 0;
-      }
-
-      .chat-heads {
-        /* border:2px solid red; */
-        cursor: pointer;
-        padding: 10px;
-        margin-bottom: 1px;
-        /* padding:0px; */
-        height: 40px;
-        /* border:2px solid red; */
-        /* background-color: darkslategrey;  */
-        display: flex;
-        align-items: center;
-        width: 94%;
-      }
-      .chat-heads:hover {
-        background: hsl(165, 38%, 35%);
-      }
-
-      .chat-heads .avatar {
-        width: 45px;
-        height: 45px;
-        background-color: #3498db; /* Background color for the avatar */
-        border-radius: 50%; /* Create a circular shape */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 20px; /* Adjust the font size */
-        color: white;
-      }
-      .text-container {
-        padding: 10px;
-      }
-      .text {
-        font-size: 14;
-        color: white;
-        max-width: 220px;
-        max-height: 20px;
+      .message {
+        background-color: inherit;
+        min-width: 0px;
+        white-space: nowrap;
         overflow: hidden;
-      }
-      .recent-time {
-        font-size: 12px;
-      }
-      .text span {
-        position: unset;
-        font-size: 12px;
-      }
-      .text i {
-        padding: 5px;
-        opacity: 0;
-      }
-      .recent {
-        font-size: 12px;
-        padding-top: 4px;
-        color: #ccc;
-      }
-      .selected {
-        background-color: darkslategrey;
-      }
-      #search-icon {
-        color: red;
-        /* z-index: -1; */
-      }
-      input:focus {
-        outline: none;
-      }
-      textarea:focus {
-        outline: none;
-      }
-      .icons {
-        /* margin:10px; */
-        /* padding:10px; */
-        position: absolute;
-        top: 10px;
-        left: 940px;
-        /* padding-left:10px; */
-        font-size: 20px;
-        border-radius: 6px;
-      }
-      .icons i {
-        margin-top: 5px;
-        margin-left: 10px;
-        cursor: pointer;
-      }
-      #menu-button {
-        /* position: fixed;
-            top: 20px;
-            left: 20px; */
-        font-size: inherit;
-        cursor: pointer;
-      }
-      #menu-bar {
-        position: fixed;
-        top: 0;
-        left: -304px; /* Initially hidden to the left */
-        width: 304px;
-        height: 100%;
-        background: #213635;
-        color: white;
-        transition: left 0.2s;
-        z-index: 1;
-        overflow-y: auto;
-        padding-bottom: 10px;
+        text-overflow: ellipsis;
+        max-width: 17vw;
+        /* width: 19vw; */
       }
 
-      /* Style for the close button */
-      #userinfo i {
+      .timestamp {
+        font-size: x-small;
+        width: fit-content;
+        background-color: inherit;
         position: absolute;
-        top: 20px;
-        right: 20px;
-        font-size: 20px;
-        cursor: pointer;
-      }
-      .overlay {
-        display: none;
-        position: fixed;
         top: 0;
-        left: 303px;
-        width: 77%;
-        height: 100%;
-        background-color: rgba(
-          0,
-          0,
-          0,
-          0.5
-        ); /* Semi-transparent black overlay */
-        transition: left 5s;
-        z-index: 2; /* Place it above other content */
-      }
-      #avatar {
-        width: 50px;
-        height: 50px;
-        background-color: #3498db; /* Background color for the avatar */
-        border-radius: 50%; /* Create a circular shape */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 20px; /* Adjust the font size */
-        color: white;
-        margin-top: 20px;
-        margin-left: 20px;
-      }
-      .account-info {
-        margin-top: 10px;
-        margin-left: 20px;
-        font-size: 18px;
-      }
-      .account-info span {
-        font-size: 14px;
-        color: cadetblue;
-      }
-      #hr-setting {
-        width: 90%;
-      }
-      .archive {
-        margin-left: 20px;
-        height: 30px;
-        /* border: 2px solid red; */
-        padding-top: 10px;
-        margin-right: 12px;
-      }
-      .archive:hover {
-        background: hsl(165, 38%, 35%);
-      }
-      .archive i {
-        padding-right: 20px;
-        font-size: 18px;
-        color: white;
-      }
-
-      .toggle-switch {
-        top: 4px;
-        left: 90px;
-        position: relative;
-        display: inline-block;
-        width: 40px; /* Decreased width */
-        height: 20px; /* Decreased height */
-      }
-      .toggle-switch input {
-        display: none;
-      }
-      .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
+        padding: 10px;
         right: 0;
-        bottom: 0;
-        background-color: #ccc; /* Default background color for the switch */
-        transition: 0.4s; /* Smooth transition effect */
-        border-radius: 20px; /* Adjusted border radius */
-      }
-      .slider:before {
-        position: absolute;
-        content: "";
-        height: 16px; /* Decreased height */
-        width: 16px; /* Decreased width */
-        left: 2px; /* Adjusted left position */
-        bottom: 2px; /* Adjusted bottom position */
-        background-color: white; /* Background color for the "on" state */
-        transition: 0.4s; /* Smooth transition effect */
-        border-radius: 50%;
       }
 
-      input:checked + .slider {
-        background-color: #2196f3;
+      .chatArea {
+        background-color: #262e35;
+        height: 100vh;
+        width: 70vw;
       }
 
-      input:checked + .slider:before {
-        transform: translateX(16px);
+      .noMessageSelectedText {
+        text-align: center;
+        margin-top: 50vh;
+        margin-left: 40%;
+        padding: 7px;
+        width: fit-content;
+        background-color: #36404a;
+        border-radius: 8px;
+        display: none;
       }
 
-      .sender-info-menu {
-        position: fixed;
-        top: 0;
-        right: -250px;
-        width: 250px;
-        height: 100%;
-        background: #213635;
-        color: white;
-        transition: left 0.2s;
-        z-index: 1;
-        overflow-y: auto;
-        /* padding-left:20px; */
-        /* padding-top:20px; */
+      .topappbar {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin: 15px;
       }
 
-      #avatar2 {
-        width: 65px;
-        height: 65px;
-        background-color: #3498db; /* Background color for the avatar */
-        border-radius: 50%; /* Create a circular shape */
+      hr {
+        background-color: #36404a;
+      }
+
+      .avatar1 {
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 20px; /* Adjust the font size */
-        color: white;
-        margin-left: 20px;
-      }
-      #userinfo {
-        padding-left: 20px;
-        margin: 0;
-        margin-top: 20px;
-        padding-bottom: 15px;
-        /* position:absolute; */
       }
 
-      #name {
-        position: absolute;
-        left: 38%;
-        top: 75px;
+      .topbarusername {
+        margin-left: 15px;
+        font-size: 16px;
       }
-      #status {
-        position: absolute;
-        left: 38%;
-        top: 95px;
-        color: #ccc;
-        font-size: 12px;
+
+      .statusicon2 {
+        /* position: absolute; */
+        display: flex;
+        background-color: #95A4A7;
+        /* background-color: #06d6a0; */
+        z-index: 5;
+        height: 7px;
+        width: 7px;
+        border-radius: 50%;
+        margin-left: 10px;
       }
-      .secondsection {
-        padding-left: 20px;
+
+      .imageContainer .logoimage {
+        height: 40px;
+        width: 40px;
       }
-      .notify {
-        display: inline;
+
+      .topappbaritems {
+        padding: 10px;
+        color: #a6b0cf;
+        display: flex;
+        gap: 2rem;
+        /* margin-left: 10px; */
       }
-      .thirdsection {
-        padding-left: 20px;
+      .topappbaritems i:hover {
+        color: #7269ef;
       }
-      #block-user i {
-        color: crimson;
-      }
-      #block-user {
-        color: crimson;
-      }
-      .archive2 {
-        height: 30px;
-        padding-left: 17px;
-        /* border: 2px solid red; */
-        padding-top: 10px;
-        margin-right: 12px;
-      }
-      .archive2:hover {
-        background: hsl(165, 38%, 35%);
-      }
-      .archive2 i {
-        padding-right: 20px;
-        font-size: 18px;
+
+      .backbtn {
+        margin-right: 20px;
+        font-size: large;
+        display: none;
         color: white;
       }
-      #paperclip {
-        position: absolute;
-        font-size: 20px;
-        bottom: 3%;
-        left: 24.53%;
+
+      .topappbaritems i {
+        margin-left: 10px;
+        font-size: larger;
       }
-      #emoji-box {
+
+      .messagebox {
         position: absolute;
-        font-size: 20px;
-        bottom: 3%;
-        right: 11%;
+        bottom: 0;
+        height: fit-content;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        margin-left: 2%;
+        margin-bottom: 1%;
+        flex-grow: 1;
+        flex-shrink: 0;
+        /* background-color: rebeccapurple; */
       }
-      #mic {
+
+      .messagebox i {
+        font-size: 18px;
+        width: fit-content;
+        /* margin-left: 30px; */
+        color: #b396d1;
+        cursor: pointer;
+        /* padding-left: 5px; */
+        padding-right: 5px;
+      }
+
+      .messagebox .fa-paper-plane {
+        background-color: #6159cb;
+        color: white;
+        padding: 12px 15px;
+        border-radius: 8px;
+      }
+
+      .msgboxcontents {
+        display: flex;
+        flex-grow: 1;
+        flex-shrink: 1;
+      }
+
+      #messagebox {
+        /* width: 100vw; */
+        width: fit-content;
+        background-color: #36404a;
+        outline: none;
+        color: #8993ab;
+        border: none;
+        padding: 15px;
+        width: 50vw;
+        font-size: 14px;
+        border-radius: 4px;
+        margin-right: 10px;
+        max-width: 100%;
+        /* width: 200px; */
+      }
+
+      #messagebox {
+        flex-grow: 1;
+        flex-shrink: 1;
+      }
+
+      .msgboxitems {
+        flex-shrink: 1;
+      }
+
+      #messagebox::placeholder {
+        color: #8993ab;
+        font-size: 14px;
+      }
+
+      .messages {
+        margin: 10px;
+        display: flex;
+        height: 73vh;
+        overflow: scroll;
+        gap: 5px;
+        flex-direction: column;
+        /* box-sizing: border-box; */
+      }
+
+      .messages::-webkit-scrollbar {
+        display: none;
+      }
+
+      .msgcontainersend {
+        position: relative;
+        height: fit-content;
+        width: fit-content;
+        display: flex;
+        flex-direction: row-reverse;
+      }
+
+      .msgcontainerrec {
+        position: relative;
+        height: fit-content;
+        width: fit-content;
+        display: flex;
+      }
+
+      .timestamp1 {
+        font-size: 11px;
+        margin: 5px;
+      }
+
+      .totalcontainersend {
+        display: flex;
+        /* width:100vw; */
+        flex-direction: row-reverse;
+      }
+
+      .totalcontainerrec {
+        display: flex;
+      }
+
+      .msgrec {
+        padding: 12px;
+        background-color: #7269ef;
+        font-size: 16px;
+        border-radius: 8px 8px 8px 0px;
+        max-width: 33vw;
+        overflow: hidden;
+        word-wrap: break-word;
+      }
+
+      .msgsend {
+        padding: 12px;
+        background-color: #36404a;
+        justify-content: flex-end;
+        font-size: 16px;
+        border-radius: 8px 8px 0px 8px;
+        max-width: 30vw;
+        word-wrap: break-word;
+      }
+
+      .timestamp1 i {
+        cursor: default;
+        margin-left: 3px;
+        margin-right: 2px;
+        font-size: 10px;
+      }
+
+      .unread {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: crimson;
+        height: 4px;
+        width: 4px;
+        text-align: center;
+        padding: 5px;
+        font-size: 10px;
+        border-radius: 50%;
         position: absolute;
-        font-size: 20px;
-        bottom: 3%;
-        right: 9%;
+        bottom: 38%;
+        right: 5%;
+      }
+
+      .msgrectyp {
+        background-color: #7269ef;
+        animation-name: example;
+        animation-duration: 5s;
+        animation-iteration-count: infinite;
+      }
+
+      #first {
+        animation-name: example1;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+      }
+
+      #sec {
+        animation-name: example2;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+      }
+
+      #third {
+        animation-name: example3;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+      }
+
+      @keyframes example1 {
+        0% {
+          opacity: 0;
+        }
+
+        100% {
+          opacity: 1;
+        }
+      }
+
+      @keyframes example2 {
+        0% {
+          opacity: 0;
+        }
+
+        100% {
+          opacity: 1;
+        }
+      }
+
+      @keyframes example3 {
+        0% {
+          opacity: 0;
+        }
+
+        100% {
+          opacity: 1;
+        }
+      }
+
+      @media only screen and (max-width: 990px) {
+        .sidebar {
+          display: flex;
+          position: fixed;
+          bottom: 0;
+          height: fit-content;
+          width: 100vw;
+          flex-direction: row;
+          justify-content: flex-start;
+          box-sizing: border-box;
+        }
+
+        .items {
+          flex-direction: row;
+          padding-bottom: 0px;
+          align-items: center;
+        }
+
+        .usersdiv,
+        .chatdiv,
+        .groupdiv,
+        .usergroup,
+        .settings,
+        .avatar {
+          /* font-size: 25px; */
+          padding: 0px;
+          padding-left: 13vw;
+          background-color: inherit;
+          outline: none;
+        }
+
+        .usersdiv {
+          padding-left: 10vw;
+        }
+
+        .logo,
+        .sun,
+        #moon,
+        .tooltiptext {
+          display: none;
+        }
+
+        .message {
+          max-width: 78vw;
+        }
+
+        .chatlist {
+          height: 100vh;
+          width: 100vw;
+          padding-bottom: 50px;
+        }
+
+        .chatArea {
+          box-sizing: border-box;
+          height: 100vh;
+          width: 100vw;
+        }
+
+        .messagebox {
+          display: flex;
+          position: fixed;
+          bottom: 60px;
+          height: fit-content;
+          width: 95vw;
+          right: 10px;
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-start;
+        }
+
+        .messages {
+          height: 66vh;
+        }
+
+        .backbtn {
+          margin-left: 5px;
+          display: block;
+        }
+
+        .chatlist {
+          display: none;
+        }
+      }
+
+      @media only screen and (max-width: 800px) {
+        .sidebar {
+          height: fit-content;
+          width: 100vw;
+          display: flex;
+          justify-content: space-evenly;
+        }
+
+        .tooltiptext {
+          display: none;
+        }
+
+        .items {
+          width: max-content;
+          justify-content: space-between;
+        }
+
+        .usersdiv,
+        .chatdiv,
+        .groupdiv,
+        .usergroup,
+        .settings,
+        .sun,
+        .avatar {
+          padding-left: 10vw;
+          /* justify-content: space-between; */
+        }
+
+        .usersdiv {
+          padding: 0;
+        }
+
+        .chatlist {
+          height: 100vh;
+          width: 100vw;
+          box-sizing: border-box;
+          display: none;
+        }
+
+        img {
+          height: 40px;
+          width: 40px;
+        }
+
+        .name {
+          font-size: medium;
+        }
+
+        .user1 {
+          min-height: fit-content;
+          min-width: fit-content;
+        }
+
+        .username,
+        .message {
+          font-size: 16px;
+        }
+
+        .chatlist {
+          display: flex;
+        }
+
+        .chatlist {
+          display: none;
+        }
+      }
+
+      @media only screen and (max-width: 655px) {
+        .sidebar {
+          height: fit-content;
+          width: 100vw;
+          display: flex;
+          justify-content: space-evenly;
+        }
+
+        .items {
+          width: max-content;
+          justify-content: space-between;
+        }
+
+        .usersdiv,
+        .chatdiv,
+        .groupdiv,
+        .usergroup,
+        .settings,
+        .sun,
+        .avatar {
+          padding-left: 10vw;
+          /* justify-content: space-between; */
+        }
+        .topappbaritems {
+          gap: 0.5rem;
+        }
+        .usersdiv {
+          padding: 0;
+        }
+
+        .message {
+          font-size: 16px;
+        }
+
+        .chatlist {
+          height: 100vh;
+          width: 100vw;
+          display: flex;
+        }
+
+        .avatar,
+        .chatlist {
+          display: none;
+        }
+      }
+
+      @media only screen and (max-width: 450px) {
+        .sidebar {
+          height: fit-content;
+          width: 100vw;
+          display: flex;
+          justify-content: space-evenly;
+          box-sizing: border-box;
+        }
+
+        .items {
+          width: max-content;
+          justify-content: space-between;
+        }
+
+        .topappbaritems {
+          gap: 1rem;
+        }
+
+        .usersdiv,
+        .chatdiv,
+        .groupdiv,
+        .usergroup,
+        .settings,
+        .sun {
+          padding-left: 10vw;
+          justify-content: space-between;
+        }
+
+        .topappbaritems .fa-phone,
+        .fa-video,
+        #mgicon2 {
+          display: none;
+        }
+
+        .msgboxitems .fa-face-smile {
+          display: none;
+        }
+
+        .avatar {
+          display: none;
+        }
+
+        .chatlist {
+          display: flex;
+        }
+
+        .usersdiv {
+          padding: 0;
+        }
+
+        .items {
+          font-size: small;
+        }
+
+        i {
+          font-size: 20px;
+          outline: none;
+        }
+
+        .chatlist {
+          height: 100vh;
+          width: 100vw;
+          display: none;
+        }
+
+        .message,
+        .username,
+        .name {
+          font-size: 14px;
+          overflow: hidden;
+        }
+
+        .message {
+          max-width: 67vw;
+        }
+
+        .timestamp {
+          padding: 10px;
+        }
+
+        .tooltiptext {
+          display: none;
+        }
+
+        .topbarusername {
+          font-size: 14px;
+        }
+
+        img.logoimage {
+          height: 35px;
+          width: 35px;
+        }
+
+        .msgrec,
+        .msgsend {
+          font-size: 14px;
+        }
+
+        .messages {
+          height: 68vh;
+        }
+
+        .messagebox {
+          box-sizing: border-box;
+
+          margin: 0px;
+          margin-right: 5px;
+        }
+      }
+
+      @media only screen and (max-width: 324px) {
+        .fa-user {
+          display: none;
+        }
+        .sidebar {
+          display: flex;
+          justify-content: center;
+        }
+        .chatdiv {
+          padding: 0;
+        }
+
+        .topbarusername {
+          margin-left: 5px;
+        }
+
+        .backbtn i {
+          font-size: medium;
+        }
+      }
+
+      @media only screen and (max-height: 590px) {
+        .sidebar {
+          display: none;
+        }
+
+        .messagebox {
+          bottom: 0;
+        }
+
+        .messages {
+          height: 75vhw;
+        }
+      }
+      @media only screen and (max-height: 541px) {
+        .messages {
+          height: 65vh;
+        }
+      }
+
+      @media only screen and (max-height: 405px) {
+        .messages {
+          height: 50vh;
+        }
+      }
+
+      @media only screen and (max-height: 405px) {
+        .messages {
+          height: 40vh;
+        }
       }
     </style>
-  </head>
-  <body id="body">
-    <div class="scrollable-chat-list">
-      <div class="chatbar-nav">
-        <i class="fa fa-bars" id="menu-button"></i>
-
-        <input
-          type="text"
-          class="uname-search"
-          placeholder="Search"
-          id="uname_search" />
-        <hr />
-      </div>
-      <div class="scrollable-content" id="friends">
-        <!-- Add your users Div here to make it scrollable ! -->
-        <!-- Add more content as needed -->
-        <div class="chat-heads" id="clickable">
-          <div class="avatar">T</div>
-          <div class="text-container">
-            <div class="text">
-              <b>Name</b><span><i class="fa fa-check"></i>12:03 AM</span>
-            </div>
-            <img class="sidebar_img" src="meow.png" />
-          </div>
-        </div>
-        <div class="chat-heads" id="clickable">
-          <div class="avatar">E</div>
-          <div class="text-container">
-            <div class="text">
-              Name<span><i class="fa fa-check"></i>12:03 AM</span>
-            </div>
-            <div class="text">recent message</div>
-          </div>
-        </div>
-        <div class="chat-heads" id="clickable">
-          <div class="avatar">S</div>
-          <div class="text-container">
-            <div class="text">
-              Name<span><i class="fa fa-check"></i>12:03 AM</span>
-            </div>
-            <div class="text">recent message</div>
-          </div>
-        </div>
-        <div class="chat-heads" id="clickable">
-          <div class="avatar">T</div>
-          <div class="text-container">
-            <div class="text">
-              Name<span><i class="fa fa-check"></i>12:03 AM</span>
-            </div>
-            <div class="text">recent message</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="chat-area">
-      <div class="nav-bar">
-        <div class="users-name" id="users_name">Name</div>
-        <div class="icons">
-          <i class="fa fa-columns" aria-hidden="true" id="sender-info"></i>
-        </div>
-        <div class="recent" id="state">Typing...</div>
-      </div>
-
-      <div class="overlay" id="overlay"></div>
-
-      <div id="container" class="container">
-        <div class="receiving message_container">
-          <div class="username"><b>name</b></div>
-          <div class="colored_portion">
-            <div class="message">hello brother me is not fine</div>
-            <div class="time">2023/01/01, Sun 12:30 PM</div>
-          </div>
-        </div>
-
-        <!-- Add more chat content as needed -->
-      </div>
-
-      <form action="" id="form">
-        <input
-          type="text"
-          id="message-input"
-          name="message"
-          placeholder="Type your message"
-          required
-          autofocus disabled/>
-        <button type="submit" class="send-button">
-          Send <i class="fa fa-send-o"></i>
-        </button>
-        <input type="file" id="img" />
-        <button id="send-image" class="send-button" style="bottom: 53px">
-          send image
-        </button>
-      </form>
-    </div>
-
-    <div class="menu-bar" id="menu-bar">
-      <div id="avatar">U</div>
-      <div class="account-info">
-        Name<br />
-        <span>Status info</span>
-      </div>
-
-      <hr id="hr-setting" />
-
-      <div class="archive">
-        <i class="fa fa-archive" aria-hidden="true"></i>Archived Chats
-      </div>
-
-      <hr id="hr-setting" />
-
-      <div class="archive">
-        <i class="fa fa-users" aria-hidden="true"></i>New Group
-      </div>
-
-      <div class="archive">
-        <i class="fa fa-user-circle" aria-hidden="true"></i>Contacts
-      </div>
-
-      <div class="archive">
-        <i class="fa fa-phone" aria-hidden="true"></i>Calls
-      </div>
-
-      <div class="archive">
-        <i class="fa fa-bookmark-o" aria-hidden="true"></i>Saved
-      </div>
-
-      <div class="archive">
-        <i class="fa fa-gear" id="gear" aria-hidden="true"></i>Settings
-      </div>
-
-      <div class="archive" id="night-mode">
-        <i class="fa fa-moon-o" aria-hidden="true"></i>Night Mode
-        <label class="toggle-switch" id="slider">
-          <input type="checkbox" id="toggle" />
-          <span class="slider" id="slider1"></span>
-        </label>
-      </div>
-      <!-- Close button to slide the menu back to its original position -->
-      <!-- <i class="fa fa-times close-button" id="close-button"></i> -->
-      <!-- Add menu items here -->
-      <!-- Example: <a href="#">Item 1</a> -->
-    </div>
-
-    <div class="sender-info-menu" id="sender-info-menu">
-      <!-- <p>User Info</p> -->
-      <p id="userinfo">
-        User Info <i class="fa fa-close" id="close-button"></i>
-      </p>
-      <div class="firstsection">
-        <div class="card_avatar" id="avatar2">N</div>
-        <span id="name">Name</span>
-        <span id="status">Offline</span>
-        <hr class="hr-card" />
-      </div>
-      <div class="secondsection">
-        <!-- <div class="notification"><i class="fa fa-bell" id="notify-icon"></i>Notification</div><br> -->
-        <div class="archive2"><i class="fa fa-bell"></i> Notification</div>
-        <div class="archive2"><i class="fa fa-photo"></i> Images</div>
-
-        <div class="archive2"><i class="fa fa-link"></i>Shared Links</div>
-      </div>
-      <hr class="hr-card" />
-      <div class="thirdsection">
-        <div class="archive2">
-          <i class="fa fa-share"></i>Share this contact
-        </div>
-        <div class="archive2" id="block-user">
-          <i class="fa fa-hand-stop-o"></i>Block user
-        </div>
-      </div>
-    </div>
-
     <script>
-      const senderCardbtn = document.getElementById("sender-info");
-      const card = document.getElementById("sender-info-menu");
-      const close_btn = document.getElementById("close-button");
-      senderCardbtn.addEventListener("click", () => {
-        card.style.right = "0px";
-        overlay.style.display = "block";
-        // console.log('hi')
-      });
-      close_btn.addEventListener("click", () => {
-        card.style.right = "-250px";
-      });
-      card.addEventListener("click", () => {
-        event.stopPropagation();
+      let width = window.innerWidth;
+
+      let chatlistactive = 0;
+      let chatareaactive = 0;
+
+      let notselected = 0;
+
+      let backbtn = document.getElementById("backbtn");
+      backbtn.addEventListener("click", function () {
+        console.log("clk");
+        // chat list active
+        chatlistactive = 1;
+        chatareaactive = 0;
+        notselected = 1;
+        document.getElementById("chatArea").style.display = "none";
+        document.getElementById("chatlist").style.display = "flex";
+
+        // now need to add those sidebars here too
+        // document.getElementById('sidebar').display = "flex";
       });
 
-      document.body.addEventListener("click", (event) => {
+      // let specific user clicked
+
+      function resizefun() {
+        //1/ when decresing from normal windowm, chatArea apppers, decresing it works fine, increasing it works fine|(become normal window), -- no clicks event
+
+        //2/ decresing from nomral window, chatArea appers, clicks back btn, goes to chat list, decreasing it works fine, while increasing, goes to normal window but
+        // chat Area doesn't appers
+        // > md query is on 990, 800, 655
+        // on 990 -> only either of chatlist or chat Area can appear
+        // chatlist ma vaisakera increase garesi
         if (
-          event.target !== senderCardbtn &&
-          event.target !== card &&
-          event.target !== close_btn
+          window.innerWidth > 990 &&
+          document.getElementById("chatArea").style.display == "none"
         ) {
-          card.style.right = "-250px";
-          console.log("helo");
-        }
-      });
-    </script>
-    <!-- </script> -->
-    <script>
-      const menuButton = document.getElementById("menu-button");
-      const menuBar = document.getElementById("menu-bar");
-      const closeButton = document.getElementById("close-button");
-      const overlay = document.getElementById("overlay");
+          if (notselected == 1) {
+            document.getElementById("chatArea").style.display = "block";
 
-      menuButton.addEventListener("click", () => {
-        menuBar.style.left = "0px";
-        overlay.style.display = "block";
-      });
+            document.getElementById("chatlist").style.display = "flex";
 
-      menuBar.addEventListener("click", (event) => {
-        // Prevent clicks inside the menu bar from propagating and closing the menu
-        event.stopPropagation();
-      });
+            document.getElementById("topappbar").style.display = "none";
+            document.getElementById("message_view").style.display = "none";
+            document.getElementById("messsagebox").style.display = "none";
+            document.getElementById("hr").style.display = "none";
 
-      document.body.addEventListener("click", (event) => {
-        if (event.target !== menuButton && event.target !== menuBar) {
-          menuBar.style.left = "-304px";
-          overlay.style.display = "none";
-        }
-      });
-    </script>
-
-    <script>
-      var divElements = document.querySelectorAll(".chat-heads");
-
-      // Add a click event listener to each div
-      var selectedDiv = null;
-
-      divElements.forEach(function (divElement) {
-        divElement.addEventListener("click", function () {
-          // Deselect the previously selected div (if any)
-          if (selectedDiv) {
-            selectedDiv.classList.remove("selected");
+            document.getElementById("notselected").style.display = "flex";
           }
+          document.getElementById("chatArea").style.display = "block";
+          console.warn("here");
+        } else if (
+          window.innerWidth < 990 &&
+          document.getElementById("chatArea").style.display == "block" &&
+          chatareaactive == 0
+        ) {
+          document.getElementById("chatArea").style.display = "none";
+          document.getElementById("chatlist").style.display = "flex";
 
-          // Select the clicked div
-          divElement.classList.add("selected");
-          selectedDiv = divElement;
-        });
+          console.warn("here2 ");
+        } else if (
+          window.innerWidth > 990 &&
+          document.getElementById("chatlist").style.display != "flex" &&
+          chatareaactive == 1
+        ) {
+          document.getElementById("chatArea").style.display = "none";
+          document.getElementById("chatlist").style.display = "flex";
+          console.warn("here3 ");
+        }
+        // chat area is active
+        else if (
+          window.innerWidth < 990 &&
+          document.getElementById("chatArea").style.display == "block" &&
+          document.getElementById("chatlist").style.display == "none"
+        ) {
+          document.getElementById("chatArea").style.display = "block";
+          document.getElementById("chatlist").style.display = "none";
+          console.warn("here4 ");
+        }
+        // chat area is not active
+        else if (
+          window.innerWidth < 990 &&
+          document.getElementById("chatArea").style.display != "block" &&
+          chatareaactive == 1
+        ) {
+          document.getElementById("chatArea").style.display = "none";
+          document.getElementById("chatlist").style.display = "flex";
+          console.warn("here5 ");
+        }
 
-        divElement.addEventListener("dblclick", function (event) {
-          // Prevent the default action of double-click (text selection)
-          event.preventDefault();
-          // Remove the "selected" class on double-click to deselect
-          divElement.classList.remove("selected");
-          selectedDiv = null;
-        });
-      });
+        // chatarea ma xu tara reseize garyo vane chatlist ma janxa
+        //  chatareaactive = 1, chatlistactive= 0
+
+        // 4.// on normal window, decresases and goes to chat list and goes to chat ARea and  resizing chat area goes back to chatlist+
+
+        //3/ decreasing from normal window, chatArea appers, click back btn, opens up chat list, clicks on first element, goes to chat Area, now on increasing,
+        // goes to normal window but chat list doesn't appears
+      }
+      // need to implement for resolution check or display checks
+      // let user1 = document.getElementById("david");
+
+      // switiching to individual user screen during width < 990
+      function clicking_user() {
+        // temp_func();
+        if (document.getElementById("chatArea").style.display == "none") {
+          // chatarea active
+          chatareaactive = 1;
+          chatlistactive = 0;
+          notselected = 0;
+
+          document.getElementById("chatArea").style.display = "block";
+
+          document.getElementById("chatlist").style.display = "none";
+
+          document.getElementById("topappbar").style.display = "flex";
+          document.getElementById("message_view").style.display = "flex";
+          document.getElementById("messsagebox").style.display = "flex";
+          document.getElementById("hr").style.display = "block";
+
+          document.getElementById("notselected").style.display = "none";
+        }
+        if (document.getElementById("topappbar").style.display == "none") {
+          document.getElementById("chatArea").style.display = "block";
+
+          document.getElementById("chatlist").style.display = "flex";
+
+          document.getElementById("topappbar").style.display = "flex";
+          document.getElementById("message_view").style.display = "flex";
+          document.getElementById("messsagebox").style.display = "flex";
+          document.getElementById("hr").style.display = "block";
+
+          document.getElementById("notselected").style.display = "none";
+        }
+      }
     </script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="for_messaging_ui.js"></script>

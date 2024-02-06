@@ -20,7 +20,6 @@ const {
   orderByKey,
 } = require("firebase-admin/database");
 const { type } = require("os");
-const { disconnect } = require("process");
 const { getDownloadURL } = require("firebase-admin/storage");
 
 var username = null;
@@ -57,13 +56,21 @@ app.get("*", (req, res) => {
 
 io.on("connect", (socket) => {
   socket.on("disconnect", () => {
-    delete users[get_key(users, socket.id)];
-    // console.log(users)
+    var uname = get_key(users, socket.id);
+    delete users[uname];
+    db.ref(`friends/${uname}`).once("value", (snap) => {
+      if (snap.val()) {
+        Object.keys(snap.val()).forEach((frn) => {
+          if (users[frn]) {
+            socket.to(users[frn]).emit("offline",uname)
+          }
+        });
+      }
+    });
   });
 
   socket.on("register", (username_, password_) => {
     db.ref("users/" + username_ + "/password").once("value", (snapshot) => {
-      console.log("no errors for now");
       if (!re.test(username_)) {
         if (snapshot.val() != null) {
           socket.emit("already_exist");
@@ -77,16 +84,15 @@ io.on("connect", (socket) => {
         socket.emit("special_char");
       }
     });
-    // console.log("a new user has been created");
   });
   socket.on("credentials", (username_, password_) => {
     if (!re.test(username_)) {
       username = username_;
       var password = password_;
-      db.ref("users/" + username + "/password").once("value", (snapshot) => {
+      db.ref("users/" + username_ + "/password").once("value", (snapshot) => {
         if (snapshot.val() != null) {
           if (snapshot.val().password == password) {
-            socket.emit("received_credentials", username);
+            socket.emit("received_credentials", username_);
             console.log("a user connected");
           } else {
             socket.emit("wrong_credentials");
@@ -103,11 +109,15 @@ io.on("connect", (socket) => {
   // this signal is for knowing that the messaging page has been reached and sends friends list to load for first time
   socket.on("messaging_place", (snap) => {
     users[snap.uname] = snap.id;
-    // console.log(snap)
-    db.ref("friends/" + username).once("value", (snapshot) => {
+    db.ref("friends/" + snap.uname).once("value", (snapshot) => {
       if (snapshot.val()) {
         socket.emit("initial_friends", Object.keys(snapshot.val()));
-        console.log("this shouldnt be printed twice");
+        Object.keys(snapshot.val()).forEach((frn) => {
+          if (users[frn]) {
+            socket.emit("online", frn);
+            socket.to(users[frn]).emit("online", snap.uname);
+          }
+        });
       }
     });
   });
@@ -129,7 +139,6 @@ io.on("connect", (socket) => {
               db.ref(`friends/${receiver_}`).update({
                 [username_]: 1,
               });
-              // console.log(us)
               socket.emit("available", receiver_);
               if (users[receiver_]) {
                 socket.to(users[receiver_]).emit("available", username_);
@@ -145,14 +154,13 @@ io.on("connect", (socket) => {
 
   socket.on("talker", (uname, receiver_) => {
     receiver = receiver_;
-
-    db.ref("users/" + username + "/" + receiver).once("value", (snapshot) => {
+    db.ref("users/" + uname + "/" + receiver_).once("value", (snapshot) => {
       if (snapshot.val() != null) {
         let value = snapshot.val();
         initial_messages.push(value);
       }
     });
-    db.ref("users/" + receiver + "/" + uname).once("value", (snapshot) => {
+    db.ref("users/" + receiver_ + "/" + uname).once("value", (snapshot) => {
       let value = snapshot.val();
       initial_messages.push(value);
       initial_messages = {
@@ -172,52 +180,30 @@ io.on("connect", (socket) => {
       });
 
       // sitty code finished
-      socket.emit("initial", initial_messages);
-      // console.log(initial_messages);
+      socket.emit("initial_messages", initial_messages);
 
       initial_messages = [];
     });
   });
 
-  socket.on("msg_sent", async (uname, receiver, msg, time, type) => {
-    await db.ref("users/" + uname + "/" + receiver + "/" + time).set({
+  socket.on("msg_sent", async (uname, receiver_, msg, time, type) => {
+    await db.ref("users/" + uname + "/" + receiver_ + "/" + time).set({
       message: msg,
       sender: uname,
       type: type,
     });
-    // sessionname = [receiver, uname].sort()[0] + [receiver, uname].sort()[1];
-    // await db.ref("sessions/" + sessionname).set({
-    //   message: msg,
-    //   uname: uname,
-    //   time: { time: time },
-    //   type: type,
-    // });
 
-    socket.emit("ting", msg, uname, receiver, time, type);
-    if (users[receiver]) {
-      socket.to(users[receiver]).emit("ting", msg, uname, receiver, time, type);
+
+    socket.emit("ting", msg, uname, receiver_, time, type);
+    if (users[receiver_]) {
+      socket
+        .to(users[receiver_])
+        .emit("ting", msg, uname, receiver_, time, type);
     }
   });
-  // socket.on("ready", ({ uname, receiver }) => {
-  //   let sessionname = [receiver, uname].sort()[0] + [receiver, uname].sort()[1];
-  //   // console.log(uname, receiver);
-  //   db.ref("sessions/" + sessionname).on("value", (snapshot) => {
-  //     // console.log("\n\n", snapshot.val(), "\n\n");
-  //     if (snapshot.val())
-  //       socket.emit(
-  //         "ting",
-  //         snapshot.val().message,
-  //         snapshot.val().uname,
-  //         snapshot.val().time.time,
-  //         snapshot.val().type
-  //       );
-  //   });
-  // });
+
 
   socket.on("image_incoming", (uname, image, extension, callback) => {
-    // bucket.ref().child("img.jpg").getDownloadURL().then((url) => {
-    //   console.log(url);
-    // })
     let time = new Date().getTime();
     bucket
       .file(`${uname}/${time}.${extension}`)
@@ -233,14 +219,14 @@ io.on("connect", (socket) => {
   });
 
   // for typing
-  socket.on("typing", (receiver,uname_) => {
-    if (users[receiver]) {
-      socket.to(users[receiver]).emit("is_typing",uname_);
+  socket.on("typing", (receiver_, uname_) => {
+    if (users[receiver_]) {
+      socket.to(users[receiver_]).emit("is_typing", uname_);
     }
   });
-  socket.on("not_typing", (receiver,uname_) => {
-    if (users[receiver]) {
-      socket.to(users[receiver]).emit("isnt_typing",uname_);
+  socket.on("not_typing", (receiver_, uname_) => {
+    if (users[receiver_]) {
+      socket.to(users[receiver_]).emit("isnt_typing", uname_);
     }
   });
 });
